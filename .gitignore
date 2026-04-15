@@ -1,0 +1,76 @@
+### --- System Files ---
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### --- Project Folders ---
+# Adding the trailing slash ensures Git treats these as directories
+docs/personal/
+config/
+
+# Ignore the contents of data
+data/*
+
+# But DO NOT ignore the .gitkeep file
+!data/.gitkeep
+
+### --- Python / Environments ---
+.env
+__pycache__/
+.venv/
+venv/
+
+# Ignore the entire renv folder
+renv/
+
+# EXCEPT for these files which are needed to initialize the environment
+!renv/activate.R
+!renv/settings.json
+
+
+### --- PYODK ---
+.pyodk_config.toml
+.pyodk_cache.toml
+
+### --- Data Science Tools (R & Stata) ---
+.Rhistory
+.RData
+*.stswp
+*.smcl
+
+# Ignore the IDE folder...
+.vscode/*
+
+# ...BUT allow these specific provisioning files
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Ignores tests/results
+tests/results/
+
+### --- Quarto Core --- ###
+# Ignore the internal project state
+/.quarto/
+
+# Ignore the standard output directories
+notes/devnotes/_site/
+# /docs/
+
+# --- Jupyter Engine Artifacts ---
+# This stops Jupyter from tracking temporary autosaves
+.ipynb_checkpoints/
+
+# If you use Quarto's freeze feature to save code execution results
+notes/devnotes/_freeze/
+
+# If you use Quarto's cache feature
+/.jupyter_cache/
+
+# Ignore helper folders for standalone files (e.g., workflow_files/)
+*_files/
+
+# Ignore renv.lock in dev
+renv.lock
+
+# --- Quarto rendered files ---
+README.html
