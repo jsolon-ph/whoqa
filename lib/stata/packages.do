@@ -3,8 +3,8 @@
 * Packages
 ssc install carryforward
 
-ssc install sankey, replace
-ssc install palettes, replace
-ssc install colrspace, replace
-ssc install graphfunctions, replace
+ssc install sankey
+ssc install palettes
+ssc install colrspace
+ssc install graphfunctions
 
