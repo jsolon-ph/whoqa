@@ -1,0 +1,2837 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}/Users/juansolon/github/personal/whoqa/logs/log.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}15 Apr 2026, 23:44:05
+{txt}
+{com}. cd ~/Downloads
+{res}/Users/juansolon/Downloads
+{txt}
+{com}. 
+. * Globals
+. global whoqa ~/github/personal/whoqa
+{txt}
+{com}. cd ~
+{res}/Users/juansolon
+{txt}
+{com}. cd $whoqa
+{res}/Users/juansolon/github/personal/whoqa
+{txt}
+{com}. 
+. clear
+{txt}
+{com}. 
+. import excel using "data/raw/Submissions tally 14Apr2026 QA compliance.xlsx", ///
+>                                         sheet("Overall.2024-25 (30Apr2025)") ///
+>                                         firstr ///
+>                                         clear
+{res}{text}(36 vars, 17,956 obs)
+
+{com}. rename *, lower
+{res}{txt}
+{com}. 
+. *
+. ** Wrong tulip id
+. *Q-2024-00310 
+.  
+. replace tulipid ="HQ-2024-00310 " if tulipid =="Q-2024-00310"
+{txt}(1 real change made)
+
+{com}. 
+. *trim spaces
+. 
+. * 1. Get the list of all string variables
+. ds, has(type string)
+{txt}{col 1}a{col 15}type{col 29}qspactiont~y{col 43}tulipdecis~n{col 57}w{col 71}dgobosorcdc
+{col 1}gradedemer~y{col 15}rto{col 29}qspofficer{col 43}tulipconsu~p{col 57}science{col 71}comment
+{col 1}tulipid{col 15}orgpath{col 29}rfhconsoli~w{col 43}planningco~t{col 57}emergency{col 71}othercomment
+{col 1}myrole{col 15}phase{col 29}whatrtocla~w{col 43}executivec~t{col 57}healthsyst~s{col 71}gbsproduct
+{col 1}titlesubti~e{col 15}submission~d{col 29}normativep~e{col 43}commentmad~p{col 57}healthprom~n{col 71}otherief2f~c
+
+{com}. 
+. * 2. Loop through them. 
+. * Note: 'of varlist' automatically handles the macro correctly
+. foreach v of varlist `r(varlist)' {c -(}
+{txt}  2{com}.     
+.     * Display the name of the variable being processed 
+.     display "Cleaning variable: `v'"
+{txt}  3{com}.     
+.     * Clean the variable
+.     replace `v' = trim(ustrtrim(`v'))
+{txt}  4{com}.     replace `v' = subinstr(`v', char(160), "", .)
+{txt}  5{com}.     replace `v' = trim(`v')
+{txt}  6{com}. {c )-}
+Cleaning variable: a
+{txt}(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: gradedemergency
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: tulipid
+(12 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: myrole
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: titlesubtitle
+(307 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: type
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: rto
+(3 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: orgpath
+(6 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: phase
+(85 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: submissionnotificationreceived
+(2,218 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: qspactiontakenmmddyyyy
+(2,271 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: qspofficer
+(7 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: rfhconsolidatedreview
+(35 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: whatrtoclassificationasansw
+(21 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: normativeproductsubtype
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: tulipdecision
+(449 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: tulipconsultationtoqsp
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: planningcomment
+(643 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: executivecomment
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: commentmadeintulip
+(336 real changes made)
+(9 real changes made)
+(0 real changes made)
+Cleaning variable: w
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: science
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: emergency
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: healthsystems
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: healthpromotiondiseasepreven
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: dgobosorcdc
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: comment
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: othercomment
+(44 real changes made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: gbsproduct
+(1 real change made)
+(0 real changes made)
+(0 real changes made)
+Cleaning variable: otherief2foremailcommunic
+(17 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+{com}.         
+.         
+. drop if count==.
+{txt}(12,758 observations deleted)
+
+{com}. 
+. gen sequence = _n
+{txt}
+{com}. 
+. 
+. *rename vars
+. rename healthpromotiondiseasepreven hpdpc
+{res}{txt}
+{com}. 
+. * create id for each obs
+. * rename tulipid tulipid_original
+. * carryforward tulipid_original, gen(tulipid)
+. 
+. * drop rows with next as id
+. drop if tulipid=="next"
+{txt}(1 observation deleted)
+
+{com}. drop if tulipid==""
+{txt}(2,550 observations deleted)
+
+{com}. 
+. 
+. * create units based on column arrays using column names as unit names
+. 
+. 
+. 
+. gen unit_str = ""
+{txt}(2,647 missing values generated)
+
+{com}.         foreach var in science emergency healthsystems hpdpc dgobosorcdc {c -(}
+{txt}  2{com}.     replace unit_str = "`var'" if `var' != "0"
+{txt}  3{com}. {c )-}
+{txt}variable {bf}{res}unit_str{sf}{txt} was {bf}{res}str1{sf}{txt} now {bf}{res}str7{sf}
+{txt}(94 real changes made)
+variable {bf}{res}unit_str{sf}{txt} was {bf}{res}str7{sf}{txt} now {bf}{res}str9{sf}
+{txt}(483 real changes made)
+variable {bf}{res}unit_str{sf}{txt} was {bf}{res}str9{sf}{txt} now {bf}{res}str13{sf}
+{txt}(611 real changes made)
+(1,316 real changes made)
+(22 real changes made)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. rename phase phase_old
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. encode phase_old, gen(phase2)
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. d phase*
+
+{txt}Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:phase_old      }{txt}{bind: str24   }{bind:%24s      }{space 1}{bind:         }{bind:  }{res}{res}Phase{p_end}
+{p 0 48}{bind:phase2         }{txt}{bind: long    }{bind:%24.0g    }{space 1}{bind:phase2   }{bind:  }{res}{res}Phase{p_end}
+
+{com}. label list phase2
+{txt}phase2:
+{res}           1 Consult
+           2 Excecutive
+           3 Executive
+           4 Exeecutive
+           5 Other
+           6 Planning
+           7 Production
+           8 withdrawn (after review)
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. label define phase 1 "Planning" 2 "Executive" 3 "Other" 
+{txt}
+{com}. 
+. recode phase2 2=2 3=2 4=2 1=3 6=1 7=3 5=3 8=3,  gen(phase)
+{txt}(2,640 differences between {bf:phase2} and {bf:phase})
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. label value phase phase
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. d phase*
+
+{txt}Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:phase_old      }{txt}{bind: str24   }{bind:%24s      }{space 1}{bind:         }{bind:  }{res}{res}Phase{p_end}
+{p 0 48}{bind:phase2         }{txt}{bind: long    }{bind:%24.0g    }{space 1}{bind:phase2   }{bind:  }{res}{res}Phase{p_end}
+{p 0 48}{bind:phase          }{txt}{bind: long    }{bind:%9.0g     }{space 1}{bind:phase    }{bind:  }{res}{res}RECODE of phase2 (Phase){p_end}
+
+{com}. tab phsae phase2
+{err}variable {bf}phsae{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. tab phase phase2
+
+ {txt}RECODE of {c |}
+    phase2 {c |}                         Phase
+   (Phase) {c |}   Consult  Excecutiv  Executive  Exeecutiv      Other {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+  Planning {c |}{res}         0          0          0          0          0 {txt}{c |}{res}     1,417 
+{txt} Executive {c |}{res}         0          7      1,199          1          0 {txt}{c |}{res}     1,207 
+{txt}     Other {c |}{res}         2          0          0          0          1 {txt}{c |}{res}        23 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}         2          7      1,199          1          1 {txt}{c |}{res}     2,647 
+
+
+ {txt}RECODE of {c |}
+    phase2 {c |}              Phase
+   (Phase) {c |}  Planning  Productio  withdrawn {c |}     Total
+{hline 11}{c +}{hline 33}{c +}{hline 10}
+  Planning {c |}{res}     1,417          0          0 {txt}{c |}{res}     1,417 
+{txt} Executive {c |}{res}         0          0          0 {txt}{c |}{res}     1,207 
+{txt}     Other {c |}{res}         0         19          1 {txt}{c |}{res}        23 
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+     Total {c |}{res}     1,417         19          1 {txt}{c |}{res}     2,647 
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. la var phase "Phase"
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. d phase*
+
+{txt}Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:phase_old      }{txt}{bind: str24   }{bind:%24s      }{space 1}{bind:         }{bind:  }{res}{res}Phase{p_end}
+{p 0 48}{bind:phase2         }{txt}{bind: long    }{bind:%24.0g    }{space 1}{bind:phase2   }{bind:  }{res}{res}Phase{p_end}
+{p 0 48}{bind:phase          }{txt}{bind: long    }{bind:%9.0g     }{space 1}{bind:phase    }{bind:  }{res}{res}Phase{p_end}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}.         drop phase_old phase2
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. ** gen byte unit for tables
+. 
+. encode unit_str, gen(unit)
+{txt}
+{com}.         la var unit "Division"
+{txt}
+{com}.                 drop unit_str
+{txt}
+{com}.                 
+. label drop unit
+{txt}
+{com}. label define unit 1 "GPA" 2 "WHE" 3 "HSD" 4 "PPC" 5 "SCI"
+{txt}
+{com}. 
+. **** encode byte decision for tables
+. encode tulipd, gen(tulipd2)
+{txt}
+{com}. 
+. *recode  to consolidate withdrawn labels
+. 
+. recode tulipd2 (8/10 = 8) (1=9) (2=1) (3=2) (7=3) (4=4) (5=4) (6=5) (9=6) (8=7), ///
+>         gen(decision)
+{txt}(2,522 differences between {bf:tulipd2} and {bf:decision})
+
+{com}.         
+.         capture drop decision
+{txt}
+{com}. recode tulipd2 (1=11) (2=1) (3=2) (7=3) (4=4) (5=4) (6=5)(8/10=7), gen(decision)
+{txt}(2,525 differences between {bf:tulipd2} and {bf:decision})
+
+{com}.         
+.         tab tulipd2 dec
+
+                      {txt}{c |}     RECODE of tulipd2 (TULIP Decision)
+       TULIP Decision {c |}         1          2          3          4 {c |}     Total
+{hline 22}{c +}{hline 44}{c +}{hline 10}
+          Add comment {c |}{res}         0          0          0          0 {txt}{c |}{res}         5 
+{txt}              Approve {c |}{res}       772          0          0          0 {txt}{c |}{res}       772 
+{txt} Conditional Approval {c |}{res}         0      1,160          0          0 {txt}{c |}{res}     1,160 
+{txt}             Reassign {c |}{res}         0          0          0         51 {txt}{c |}{res}        51 
+{txt}Reassign (with approv {c |}{res}         0          0          0         15 {txt}{c |}{res}        15 
+{txt}   Respond to consult {c |}{res}         0          0          0          0 {txt}{c |}{res}       156 
+{txt}        Return to RTO {c |}{res}         0          0        398          0 {txt}{c |}{res}       398 
+{txt}            Withdrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}         3 
+{txt}             Withrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}         1 
+{txt}    product withdrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}        15 
+{txt}{hline 22}{c +}{hline 44}{c +}{hline 10}
+                Total {c |}{res}       772      1,160        398         66 {txt}{c |}{res}     2,576 
+
+
+                      {txt}{c |}     RECODE of tulipd2 (TULIP
+                      {c |}            Decision)
+       TULIP Decision {c |}         5          7         11 {c |}     Total
+{hline 22}{c +}{hline 33}{c +}{hline 10}
+          Add comment {c |}{res}         0          0          5 {txt}{c |}{res}         5 
+{txt}              Approve {c |}{res}         0          0          0 {txt}{c |}{res}       772 
+{txt} Conditional Approval {c |}{res}         0          0          0 {txt}{c |}{res}     1,160 
+{txt}             Reassign {c |}{res}         0          0          0 {txt}{c |}{res}        51 
+{txt}Reassign (with approv {c |}{res}         0          0          0 {txt}{c |}{res}        15 
+{txt}   Respond to consult {c |}{res}       156          0          0 {txt}{c |}{res}       156 
+{txt}        Return to RTO {c |}{res}         0          0          0 {txt}{c |}{res}       398 
+{txt}            Withdrawn {c |}{res}         0          3          0 {txt}{c |}{res}         3 
+{txt}             Withrawn {c |}{res}         0          1          0 {txt}{c |}{res}         1 
+{txt}    product withdrawn {c |}{res}         0         15          0 {txt}{c |}{res}        15 
+{txt}{hline 22}{c +}{hline 33}{c +}{hline 10}
+                Total {c |}{res}       156         19          5 {txt}{c |}{res}     2,576 
+{txt}
+{com}.         
+.         label define decision 1 "Approve" 2 "Conditional Approval" 3 "Return to RTO" 4 "Reassign" ///
+>         5 "Respond to Consult" 7 "Withdrawn"  11 "Add comment"
+{txt}
+{com}.         label values decision decision
+{txt}
+{com}. 
+.         la var decision "Event Decision"
+{txt}
+{com}. 
+.                         drop tulipd2
+{txt}
+{com}. **** DATES
+. 
+. * replace 2023 to 2024 for two obs
+. replace submissionnotificationreceived = "7/14/2024" if submissionnotificationreceived =="7/14/2023" 
+{txt}(1 real change made)
+
+{com}. replace submissionnotificationreceived = "3/11/2024" if submissionnotificationreceived =="3/11/2023"
+{txt}(1 real change made)
+
+{com}. 
+. 
+. capture drop date_sub
+{txt}
+{com}. replace submissionnotificationreceived = "7/31/2025" if submissionnotificationreceived=="7/32/2025"
+{txt}(1 real change made)
+
+{com}. * Generate date from string from Month-Day-Year (MDY)
+. gen date_sub = date(submissionnotificationreceived, "MDY")
+{txt}(21 missing values generated)
+
+{com}.         la var date_sub "Date Submitted"
+{txt}
+{com}.         
+. 
+. 
+. 
+. 
+. 
+. * Assuming your string variable is called 'date_str'
+. gen date_sub2 = date(submissionnotificationreceived, "DMY")
+{txt}(1,595 missing values generated)
+
+{com}. 
+. replace date_sub = date_sub2 if date_sub ==.
+{txt}(21 real changes made)
+
+{com}. 
+. * DATE FORMATS
+. * Date format as ddmonyy
+. format date_sub %tdddmonyy
+{txt}
+{com}. 
+. * Generate year, month, quarter from date_sub
+. 
+. * Extract Year 
+. gen year_sub = year(date_sub)
+{txt}
+{com}. 
+. * Extract Quarter 
+. gen quarter_sub = quarter(date_sub)
+{txt}
+{com}. 
+. * Extract Month 
+. gen month_sub = month(date_sub)
+{txt}
+{com}. 
+. 
+. * order
+. order sequence count tulipid* date_sub unit tulipdecision
+{txt}
+{com}. 
+. * distincts
+. distinct tulipid* 
+{res}
+{col 1}{text}{hline 9}{c TT}{hline 11}{hline 11}
+{col 1}{text}        {col 10}{c |}     total{col 22}  distinct
+{res}{col 1}{text}{hline 9}{c +}{hline 11}{hline 11}
+{res}{col 1}{text} tulipid{col 10}{c |}{result}      2647{col 22}      1478
+{col 1}{text}{hline 9}{c BT}{hline 11}{hline 11}
+{res}{txt}
+{com}. 
+. 
+. **** duplicate tags
+. 
+. duplicates tag title, gen(duptitle)
+
+{p 0 4}{txt}Duplicates in terms of {res} titlesubtitle{p_end}
+{txt}
+{com}. la var duptitle "Duplicates: Title"
+{txt}
+{com}. 
+. duplicates tag tulipid date_sub, gen(dup_id_date_sub)
+
+{p 0 4}{txt}Duplicates in terms of {res} tulipid date_sub{p_end}
+{txt}
+{com}. la var dup_id_date_sub "Duplicates: ID and Date"
+{txt}
+{com}. 
+. **** missings tags
+. * no decision
+. missings tag decision, gen(mis_decision)
+
+{p 0 4}{txt}Checking missings in {res} decision:{txt}{p_end}
+71 / 2647 observations with missing values
+
+{com}. la var mis_decision "Missing: Decision"
+{txt}
+{com}. 
+. ** Create a counter by id and date
+. *** method 1 same dates have different sequence sequence crosses phases
+. sort phase tulipid date_sub
+{txt}
+{com}. bysort tulipid: gen wf_seq = _n
+{txt}
+{com}. la var wf_seq "Workflow sequenceby phase, id and date"
+{txt}
+{com}. 
+. *** method 2 sequence restarts per phase
+. sort phase tulipid date_sub 
+{txt}
+{com}. bysort phase tulipid : gen wf_seq2 = _n
+{txt}
+{com}. 
+. drop wf_seq2
+{txt}
+{com}. 
+. bysort phase tulipid date_sub : gen wf_seq2 =_n
+{txt}
+{com}. la var wf_seq2 "Workflow sequence by phase and id with tied dates having same seq"
+{txt}
+{com}. 
+. 
+. * Generate a new variable with the first 20 characters
+. gen ti_short = substr(title, 1, 20)
+{txt}
+{com}. *** generate year_Sub
+. ***** REPORT
+. 
+. ** Recode missing decision
+. * Replace system missing (.) with extended missing (.a)
+. replace decision = .a if decision == .
+{txt}(71 real changes made, 71 to missing)
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. /*
+> Total Data
+> EU
+> HQ
+> */
+. 
+. 
+. 
+. list orgpath if unit ==.
+{txt}
+      {c TLC}{hline 20}{c TRC}
+      {c |} {res}           orgpath {txt}{c |}
+      {c LT}{hline 20}{c RT}
+   1. {c |} {res}EU/RGO/CHP/BON/WAC {txt}{c |}
+   2. {c |} {res}    EU/RGO/SNI/NAO {txt}{c |}
+   3. {c |} {res}    EU/RGO/SNI/NAO {txt}{c |}
+   4. {c |} {res}    EU/RGO/SNI/NAO {txt}{c |}
+   8. {c |} {res}HQ/PPC/LHR/CAO/OPH {txt}{c |}
+      {c LT}{hline 20}{c RT}
+  22. {c |} {res}        HQ/POL/PRD {txt}{c |}
+  89. {c |} {res}            HQ/SCI {txt}{c |}
+ 235. {c |} {res}            HQ/NMC {txt}{c |}
+ 291. {c |} {res}        HQ/POL/CNT {txt}{c |}
+ 292. {c |} {res}        HQ/POL/CNT {txt}{c |}
+      {c LT}{hline 20}{c RT}
+ 293. {c |} {res}                   {txt}{c |}
+ 364. {c |} {res}    HQ/POL/RMC/COM {txt}{c |}
+ 441. {c |} {res}    HQ/PPC/NFS/nfa {txt}{c |}
+ 442. {c |} {res}    HQ/PPC/NFS/nfa {txt}{c |}
+ 471. {c |} {res}HQ/HSD/HPS/PAM/MDA {txt}{c |}
+      {c LT}{hline 20}{c RT}
+ 509. {c |} {res}        HQ/POL/RMC {txt}{c |}
+ 510. {c |} {res}        HQ/POL/RMC {txt}{c |}
+ 516. {c |} {res}        HQ/POL/DAI {txt}{c |}
+ 517. {c |} {res}        HQ/POL/DAI {txt}{c |}
+ 568. {c |} {res}    HQ/UHL/HGF/HEF {txt}{c |}
+      {c LT}{hline 20}{c RT}
+ 585. {c |} {res}    HQ/POL/DAI/SLD {txt}{c |}
+ 586. {c |} {res}            HQ/SCI {txt}{c |}
+ 591. {c |} {res}    HQ/UHL/HGF/HEF {txt}{c |}
+ 625. {c |} {res}        HQ/POL/PTP {txt}{c |}
+ 758. {c |} {res}            HQ/UHL {txt}{c |}
+      {c LT}{hline 20}{c RT}
+ 762. {c |} {res}    HQ/UHL/HGF/EEA {txt}{c |}
+ 830. {c |} {res}        HQ/POL/PTP {txt}{c |}
+ 850. {c |} {res}                   {txt}{c |}
+ 883. {c |} {res}                   {txt}{c |}
+ 952. {c |} {res}    HQ/PPC/ECO/CRH {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1031. {c |} {res}    HQ/POL/DAI/PSL {txt}{c |}
+1072. {c |} {res}            HQ/HSR {txt}{c |}
+1073. {c |} {res}            HQ/HSR {txt}{c |}
+1126. {c |} {res}            HQ/SCI {txt}{c |}
+1241. {c |} {res}    HQ/POL/DAI/PSL {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1283. {c |} {res}    HQ/PCC/ECO/CEA {txt}{c |}
+1290. {c |} {res}            HQ/POL {txt}{c |}
+1291. {c |} {res}            HQ/POL {txt}{c |}
+1292. {c |} {res}            HQ/POL {txt}{c |}
+1321. {c |} {res}            HQ/SCI {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1344. {c |} {res}    HQ/PPC/ECO/CRH {txt}{c |}
+1347. {c |} {res}    HQ/PPC/HTH/SPC {txt}{c |}
+1364. {c |} {res}    HQ/POL/DAI/PSL {txt}{c |}
+1365. {c |} {res}    HQ/POL/DAI/PSL {txt}{c |}
+1366. {c |} {res}    HQ/POL/DAI/PSL {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1380. {c |} {res}    HQ/PPC/NMH/CAI {txt}{c |}
+1381. {c |} {res}    HQ/PPC/MNT/VCE {txt}{c |}
+1382. {c |} {res}    HQ/PPC/NMH/MND {txt}{c |}
+1383. {c |} {res}    HQ/PPC/NMH/MND {txt}{c |}
+1384. {c |} {res}            HQ/HSR {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1387. {c |} {res}    HQ/PPC/MNT/VCE {txt}{c |}
+1388. {c |} {res}    HQ/PPC/MNT/VCE {txt}{c |}
+1391. {c |} {res}    HQ/HSD/HPS/PSN {txt}{c |}
+1392. {c |} {res}    HQ/PPC/MNT/PTC {txt}{c |}
+1393. {c |} {res}    HQ/PPC/NFS/NFA {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1395. {c |} {res}HQ/HSD/PFD/SDP/QPS {txt}{c |}
+1396. {c |} {res}            HQ/HRP {txt}{c |}
+1397. {c |} {res}    HQ/PPC/LHR/SIM {txt}{c |}
+1398. {c |} {res}            HQ/NMC {txt}{c |}
+1400. {c |} {res}            HQ/HRP {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1402. {c |} {res}HQ/PPC/HTH/PDT/TPT {txt}{c |}
+1408. {c |} {res}    HQ/PCC/ECO/CEA {txt}{c |}
+1410. {c |} {res}    HQ/HSD/DDA/ISD {txt}{c |}
+1411. {c |} {res}    HQ/HSD/PFD/PPE {txt}{c |}
+1412. {c |} {res}        RC/NME/LSB {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1413. {c |} {res}            RC/CSU {txt}{c |}
+1414. {c |} {res}    SE/RGO/HPN/HRF {txt}{c |}
+1415. {c |} {res}        SE/ACO/MMR {txt}{c |}
+1416. {c |} {res}            HQ/NMC {txt}{c |}
+1417. {c |} {res}    WP/ACO/KIR/KI1 {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1418. {c |} {res}    EU/RGO/PNP/NAO {txt}{c |}
+1457. {c |} {res}        HQ/DDG/GNP {txt}{c |}
+1459. {c |} {res}    HQ/UHL/HGF/EEA {txt}{c |}
+1460. {c |} {res}    HQ/UHL/HGF/EEA {txt}{c |}
+1464. {c |} {res}        HQ/HEO/LCD {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1465. {c |} {res}        HQ/HEO/LCD {txt}{c |}
+1466. {c |} {res}        HQ/HEO/LCD {txt}{c |}
+1467. {c |} {res}        HQ/HEO/LCD {txt}{c |}
+1489. {c |} {res}    HQ/UHL/HGF/HEF {txt}{c |}
+1515. {c |} {res}    HQ/UHL/HGF/HEF {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1524. {c |} {res}            HQ/POL {txt}{c |}
+1541. {c |} {res}        HQ/DDG/GNP {txt}{c |}
+1543. {c |} {res}        HQ/DDG/PHM {txt}{c |}
+1672. {c |} {res}        HQ/DDG/GNP {txt}{c |}
+1674. {c |} {res}                   {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1688. {c |} {res}    HQ/SCI/SFH/REE {txt}{c |}
+1689. {c |} {res}            HQ/NMC {txt}{c |}
+1696. {c |} {res}        HQ/DDG/PTP {txt}{c |}
+1715. {c |} {res}            HQ/SCI {txt}{c |}
+1837. {c |} {res}            HQ/NMC {txt}{c |}
+      {c LT}{hline 20}{c RT}
+1838. {c |} {res}            HQ/NMC {txt}{c |}
+1950. {c |} {res}    HQ/POL/RMC/COM {txt}{c |}
+1987. {c |} {res}    HQ/HSD/PFD/GPF {txt}{c |}
+2009. {c |} {res}        HQ/POL/RMC {txt}{c |}
+2010. {c |} {res}        HQ/POL/RMC {txt}{c |}
+      {c LT}{hline 20}{c RT}
+2011. {c |} {res}        HQ/POL/RMC {txt}{c |}
+2048. {c |} {res}    HQ/UHL/HGF/HEF {txt}{c |}
+2068. {c |} {res}    HQ/POL/DAI/SLD {txt}{c |}
+2069. {c |} {res}    HQ/POL/DAI/PSL {txt}{c |}
+2094. {c |} {res}                   {txt}{c |}
+      {c LT}{hline 20}{c RT}
+2109. {c |} {res}                   {txt}{c |}
+2151. {c |} {res}                   {txt}{c |}
+2152. {c |} {res}                   {txt}{c |}
+2155. {c |} {res}            HQ/NMC {txt}{c |}
+2156. {c |} {res}                   {txt}{c |}
+      {c LT}{hline 20}{c RT}
+2160. {c |} {res}        HQ/CSF/OHS {txt}{c |}
+2192. {c |} {res}    HQ/PPC/NFS/NFA {txt}{c |}
+2203. {c |} {res}    HQ/UHL/HGF/EEA {txt}{c |}
+2266. {c |} {res}        HQ/POL/PTP {txt}{c |}
+2457. {c |} {res}            HQ/HSR {txt}{c |}
+      {c LT}{hline 20}{c RT}
+2458. {c |} {res}            HQ/HSR {txt}{c |}
+2494. {c |} {res}            HQ/NMC {txt}{c |}
+2499. {c |} {res}            HQ/SCI {txt}{c |}
+2500. {c |} {res}            HQ/SCI {txt}{c |}
+2502. {c |} {res}    HQ/PPC/ECO/CAE {txt}{c |}
+      {c LT}{hline 20}{c RT}
+2572. {c |} {res}    HQ/POL/DAI/PSL {txt}{c |}
+2577. {c |} {res}    HQ/PPC/DPP/FLM {txt}{c |}
+2578. {c |} {res}    HQ/PPC/DPP/FLM {txt}{c |}
+2606. {c |} {res}            HQ/SCI {txt}{c |}
+2622. {c |} {res}        SE/ACO/MMR {txt}{c |}
+      {c LT}{hline 20}{c RT}
+2623. {c |} {res}        SE/ACO/MMR {txt}{c |}
+      {c BLC}{hline 20}{c BRC}
+
+{com}. 
+. *** REPLACE orgpath
+. * RGO
+. foreach org in "EU/RGO/CHP/BON/WAC" "EU/RGO/PNP/NAO" "SE/ACO/MMR" ///
+> "SE/RGO/HPN/HRF" "WP/ACO/KIR/KI1" "EU/RGO/SNI/NAO" {c -(}
+{txt}  2{com}.     replace unit = 6 if unit == . & orgpath == "`org'"
+{txt}  3{com}. {c )-}
+{txt}(1 real change made)
+(1 real change made)
+(3 real changes made)
+(1 real change made)
+(1 real change made)
+(3 real changes made)
+
+{com}. 
+. replace unit = 6 if unit == . & regexm(orgpath, "RGO")
+{txt}(0 real changes made)
+
+{com}. * GPA
+. 
+. foreach org in "HQ/CSF/OHS" "HQ/DDG/PTP" "HQ/POL" "HQ/POL/CNT" "HQ/POL/DAI" ///
+> "HQ/POL/DAI/PSL" "HQ/POL/DAI/SLD" "HQ/POL/PRD" "HQ/POL/PTP" ///
+> "HQ/POL/RMC" "HQ/POL/RMC/COM" ///
+> {c -(}
+{txt}  2{com}.     replace unit = 1 if unit == . & orgpath == "`org'"
+{txt}  3{com}. {c )-}
+{txt}(1 real change made)
+(1 real change made)
+(4 real changes made)
+(2 real changes made)
+(2 real changes made)
+(7 real changes made)
+(2 real changes made)
+(1 real change made)
+(3 real changes made)
+(5 real changes made)
+(2 real changes made)
+
+{com}. 
+. replace unit = 1 if unit == . & regexm(orgpath, "GPA")
+{txt}(0 real changes made)
+
+{com}. replace unit = 1 if unit == . & regexm(orgpath, "POL")
+{txt}(0 real changes made)
+
+{com}. 
+. * WHE
+. foreach org in "HQ/HEO/LCD"  {c -(}
+{txt}  2{com}.     replace unit = 2 if unit == . & orgpath == "`org'"
+{txt}  3{com}. {c )-}
+{txt}(4 real changes made)
+
+{com}. 
+. replace unit = 2 if unit == . & regexm(orgpath, "WHE")
+{txt}(0 real changes made)
+
+{com}. 
+. * HSD
+. foreach org in "HQ/HSD/DDA/ISD" "HQ/HSD/HPS/PAM/MDA" "HQ/HSD/HPS/PSN" "HQ/HSD/PFD/GPF" ///
+> "HQ/HSD/PFD/PPE" "HQ/HSD/PFD/SDP/QPS" "HQ/UHL/HGF/EEA" "HQ/UHL/HGF/HEF" ///
+> "RC/CSU" "RC/NME/LSB" {c -(}
+{txt}  2{com}.     replace unit = 3 if unit == . & orgpath == "`org'"
+{txt}  3{com}. {c )-}
+{txt}(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(4 real changes made)
+(5 real changes made)
+(1 real change made)
+(1 real change made)
+
+{com}. 
+. replace unit = 3 if unit == . & regexm(orgpath, "HSD")
+{txt}(0 real changes made)
+
+{com}. 
+. * PPC
+. foreach org in "HQ/DDG/GNP" "HQ/DDG/PHM" "HQ/HRP" "HQ/NMC" "HQ/UHL" "HQ/PCC/ECO/CEA"  {c -(}
+{txt}  2{com}.     replace unit = 4 if unit == . & orgpath == "`org'"
+{txt}  3{com}. {c )-}
+{txt}(3 real changes made)
+(1 real change made)
+(2 real changes made)
+(8 real changes made)
+(1 real change made)
+(2 real changes made)
+
+{com}. 
+. 
+. * Replace unit = 4 if orgpath contains "PPC"
+. replace unit = 4 if unit == . & regexm(orgpath, "PPC")
+{txt}(20 real changes made)
+
+{com}. 
+. * SCI
+. 
+. foreach org in "HQ/HSR" {c -(}
+{txt}  2{com}.     replace unit = 5 if unit == . & orgpath == "`org'"
+{txt}  3{com}. {c )-}
+{txt}(5 real changes made)
+
+{com}. 
+. replace unit = 5 if unit == . & regexm(orgpath, "SCI")
+{txt}(9 real changes made)
+
+{com}. 
+. list orgpath if unit ==.
+{txt}
+      {c TLC}{hline 9}{c TRC}
+      {c |} {res}orgpath {txt}{c |}
+      {c LT}{hline 9}{c RT}
+ 293. {c |} {res}        {txt}{c |}
+ 850. {c |} {res}        {txt}{c |}
+ 883. {c |} {res}        {txt}{c |}
+1674. {c |} {res}        {txt}{c |}
+2094. {c |} {res}        {txt}{c |}
+      {c LT}{hline 9}{c RT}
+2109. {c |} {res}        {txt}{c |}
+2151. {c |} {res}        {txt}{c |}
+2152. {c |} {res}        {txt}{c |}
+2156. {c |} {res}        {txt}{c |}
+      {c BLC}{hline 9}{c BRC}
+
+{com}. 
+. browse rto tulipid orgpath ti_s if unit ==.
+{txt}
+{com}. ** CHANGE unit based on ID 
+. * ppc 
+. 
+. foreach id in "HQ-2024-03132" "HQ-2024-03554" "HQ-2024-03245" "HQ-2024-04377" {c -(}
+{txt}  2{com}.     replace unit = 4 if unit == . & tulipid == "`id'"
+{txt}  3{com}. {c )-}
+{txt}(1 real change made)
+(2 real changes made)
+(1 real change made)
+(1 real change made)
+
+{com}. 
+. * whe 
+. 
+. foreach id in "HQ-2023-01007" {c -(}
+{txt}  2{com}.     replace unit = 2 if unit == . & tulipid == "`id'"
+{txt}  3{com}. {c )-}
+{txt}(1 real change made)
+
+{com}. 
+. 
+. * ppc 
+. 
+. foreach id in "HQ-2024-01335" "HQ-2024-03579" {c -(}
+{txt}  2{com}.     replace unit = 3 if unit == . & tulipid == "`id'"
+{txt}  3{com}. {c )-}
+{txt}(1 real change made)
+(1 real change made)
+
+{com}. 
+. list orgpath if unit ==.
+{txt}
+      {c TLC}{hline 9}{c TRC}
+      {c |} {res}orgpath {txt}{c |}
+      {c LT}{hline 9}{c RT}
+ 883. {c |} {res}        {txt}{c |}
+      {c BLC}{hline 9}{c BRC}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. tab phase year, missing
+
+           {txt}{c |}             year_sub
+     Phase {c |}      2024       2025       2026 {c |}     Total
+{hline 11}{c +}{hline 33}{c +}{hline 10}
+  Planning {c |}{res}       711        607         99 {txt}{c |}{res}     1,417 
+{txt} Executive {c |}{res}       480        676         51 {txt}{c |}{res}     1,207 
+{txt}     Other {c |}{res}        12         11          0 {txt}{c |}{res}        23 
+{txt}{hline 11}{c +}{hline 33}{c +}{hline 10}
+     Total {c |}{res}     1,203      1,294        150 {txt}{c |}{res}     2,647 
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.phase , by (year_sub)
+{res}
+{smcl}
+{reset}{...}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 11} {space 23}year_sub{space 22}
+{space 11} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 10} {result:1,203 (45.4%)} {result:1,294 (48.9%)} {result:150 (5.7%)} {result:2,647 (100.0%)}
+Phase{space 6} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 1} {space 2}{result:711 (59.1%)} {space 2}{result:607 (46.9%)} {result:99 (66.0%)} {space 1}{result:1,417 (53.5%)}
+  Executive {space 2}{result:480 (39.9%)} {space 2}{result:676 (52.2%)} {result:51 (34.0%)} {space 1}{result:1,207 (45.6%)}
+  Other{space 4} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.phase if wf_seq2==1, by (year_sub)
+{res}
+{smcl}
+{reset}{...}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 11} {space 23}year_sub{space 22}
+{space 11} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 10} {result:1,164 (44.8%)} {result:1,289 (49.6%)} {result:148 (5.7%)} {result:2,601 (100.0%)}
+Phase{space 6} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 1} {space 2}{result:688 (59.1%)} {space 2}{result:604 (46.9%)} {result:97 (65.5%)} {space 1}{result:1,389 (53.4%)}
+  Executive {space 2}{result:464 (39.9%)} {space 2}{result:674 (52.3%)} {result:51 (34.5%)} {space 1}{result:1,189 (45.7%)}
+  Other{space 4} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. * combines
+. * Table 1: All data
+. dtable i.phase, by(year_sub) name(all_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 11} {space 23}year_sub{space 22}
+{space 11} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 10} {result:1,203 (45.4%)} {result:1,294 (48.9%)} {result:150 (5.7%)} {result:2,647 (100.0%)}
+Phase{space 6} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 1} {space 2}{result:711 (59.1%)} {space 2}{result:607 (46.9%)} {result:99 (66.0%)} {space 1}{result:1,417 (53.5%)}
+  Executive {space 2}{result:480 (39.9%)} {space 2}{result:676 (52.2%)} {result:51 (34.0%)} {space 1}{result:1,207 (45.6%)}
+  Other{space 4} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+. * Table 2: Filtered data (wf_seq2 == 1)
+. dtable i.phase if wf_seq2 == 1, by(year_sub) name(filtered_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 11} {space 23}year_sub{space 22}
+{space 11} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 10} {result:1,164 (44.8%)} {result:1,289 (49.6%)} {result:148 (5.7%)} {result:2,601 (100.0%)}
+Phase{space 6} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 1} {space 2}{result:688 (59.1%)} {space 2}{result:604 (46.9%)} {result:97 (65.5%)} {space 1}{result:1,389 (53.4%)}
+  Executive {space 2}{result:464 (39.9%)} {space 2}{result:674 (52.3%)} {result:51 (34.5%)} {space 1}{result:1,189 (45.7%)}
+  Other{space 4} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+{hline 11}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+. * Combine them into one new collection called 'combined_table'
+. collect combine combined_table = all_data filtered_data, vertical
+{err}option {bf:vertical} not allowed
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. tab decision
+
+      {txt}Event Decision {c |}      Freq.     Percent        Cum.
+{hline 21}{c +}{hline 35}
+             Approve {c |}{res}        772       29.97       29.97
+{txt}Conditional Approval {c |}{res}      1,160       45.03       75.00
+{txt}       Return to RTO {c |}{res}        398       15.45       90.45
+{txt}            Reassign {c |}{res}         66        2.56       93.01
+{txt}  Respond to Consult {c |}{res}        156        6.06       99.07
+{txt}           Withdrawn {c |}{res}         19        0.74       99.81
+{txt}         Add comment {c |}{res}          5        0.19      100.00
+{txt}{hline 21}{c +}{hline 35}
+               Total {c |}{res}      2,576      100.00
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 2, 3, 7) , ///
+>         by(year_sub) name(filtered_decision)///
+{res}{err}option {bf:/} not allowed
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 2, 3, 7) , ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Initial Decision by Year per unique product")
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 21}year_sub{space 20}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:744 (48.0%)} {result:735 (47.4%)} {space 1}{result:72 (4.6%)} {result:1,551 (100.0%)}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14}
+  Conditional Approval {result:525 (70.6%)} {result:559 (76.1%)} {result:58 (80.6%)} {space 1}{result:1,142 (73.6%)}
+  Return to RTO{space 7} {result:207 (27.8%)} {result:169 (23.0%)} {result:14 (19.4%)} {space 3}{result:390 (25.1%)}
+  Withdrawn{space 11} {space 2}{result:12 (1.6%)} {space 3}{result:7 (1.0%)} {space 2}{result:0 (0.0%)} {space 5}{result:19 (1.2%)}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. d dec
+
+{txt}Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:decision       }{txt}{bind: long    }{bind:%20.0g    }{space 1}{bind:decision }{bind:  }{res}{res}Event Decision{p_end}
+
+{com}. labe list decision
+{txt}decision:
+{res}           1 Approve
+           2 Conditional Approval
+           3 Return to RTO
+           4 Reassign
+           5 Respond to Consult
+           7 Withdrawn
+          11 Add comment
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) , ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Initial Decision by Year per unique product")
+{err}{p 0 0 2}
+collection {bf:filtered_decision} already exists and is not empty{p_end}
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) , ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Initial Decision by Year per unique product")
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 23}year_sub{space 22}
+{space 22} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:1,063 (46.4%)} {result:1,110 (48.5%)} {result:118 (5.2%)} {result:2,291 (100.0%)}
+Event Decision{space 8} {space 13} {space 13} {space 10} {space 14}
+  Approve{space 13} {space 2}{result:331 (31.1%)} {space 2}{result:382 (34.4%)} {result:46 (39.0%)} {space 3}{result:759 (33.1%)}
+  Conditional Approval {space 2}{result:525 (49.4%)} {space 2}{result:559 (50.4%)} {result:58 (49.2%)} {space 1}{result:1,142 (49.8%)}
+  Return to RTO{space 7} {space 2}{result:207 (19.5%)} {space 2}{result:169 (15.2%)} {result:14 (11.9%)} {space 3}{result:390 (17.0%)}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) ///
+>         phase==1, ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product")
+{err}invalid 'phase' 
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product")
+{err}{p 0 0 2}
+collection {bf:filtered_decision} already exists and is not empty{p_end}
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub) name(filtered_decision,replace) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product")
+{err}, invalid name
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product")
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Planning Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 21}year_sub{space 20}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:663 (52.2%)} {result:531 (41.8%)} {space 1}{result:75 (5.9%)} {result:1,269 (100.0%)}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14}
+  Approve{space 13} {result:201 (30.3%)} {result:137 (25.8%)} {result:19 (25.3%)} {space 3}{result:357 (28.1%)}
+  Conditional Approval {result:301 (45.4%)} {result:293 (55.2%)} {result:43 (57.3%)} {space 3}{result:637 (50.2%)}
+  Return to RTO{space 7} {result:161 (24.3%)} {result:101 (19.0%)} {result:13 (17.3%)} {space 3}{result:275 (21.7%)}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.phase i.decision, by(year_sub) name(all_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 23}year_sub{space 22}
+{space 22} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:1,203 (45.4%)} {result:1,294 (48.9%)} {result:150 (5.7%)} {result:2,647 (100.0%)}
+Phase{space 17} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 12} {space 2}{result:711 (59.1%)} {space 2}{result:607 (46.9%)} {result:99 (66.0%)} {space 1}{result:1,417 (53.5%)}
+  Executive{space 11} {space 2}{result:480 (39.9%)} {space 2}{result:676 (52.2%)} {result:51 (34.0%)} {space 1}{result:1,207 (45.6%)}
+  Other{space 15} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+Event Decision{space 8} {space 13} {space 13} {space 10} {space 14}
+  Approve{space 13} {space 2}{result:344 (28.6%)} {space 2}{result:382 (30.8%)} {result:46 (34.6%)} {space 3}{result:772 (30.0%)}
+  Conditional Approval {space 2}{result:540 (45.0%)} {space 2}{result:561 (45.2%)} {result:59 (44.4%)} {space 1}{result:1,160 (45.0%)}
+  Return to RTO{space 7} {space 2}{result:213 (17.7%)} {space 2}{result:171 (13.8%)} {result:14 (10.5%)} {space 3}{result:398 (15.5%)}
+  Reassign{space 12} {space 4}{result:21 (1.7%)} {space 4}{result:39 (3.1%)} {space 2}{result:6 (4.5%)} {space 5}{result:66 (2.6%)}
+  Respond to Consult{space 2} {space 4}{result:71 (5.9%)} {space 4}{result:77 (6.2%)} {space 2}{result:8 (6.0%)} {space 4}{result:156 (6.1%)}
+  Withdrawn{space 11} {space 4}{result:12 (1.0%)} {space 5}{result:7 (0.6%)} {space 2}{result:0 (0.0%)} {space 5}{result:19 (0.7%)}
+  Add comment{space 9} {space 5}{result:0 (0.0%)} {space 5}{result:5 (0.4%)} {space 2}{result:0 (0.0%)} {space 6}{result:5 (0.2%)}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.phase i.decision if wf_seq2 == 1, by(year_sub) name(filtered_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 23}year_sub{space 22}
+{space 22} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:1,164 (44.8%)} {result:1,289 (49.6%)} {result:148 (5.7%)} {result:2,601 (100.0%)}
+Phase{space 17} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 12} {space 2}{result:688 (59.1%)} {space 2}{result:604 (46.9%)} {result:97 (65.5%)} {space 1}{result:1,389 (53.4%)}
+  Executive{space 11} {space 2}{result:464 (39.9%)} {space 2}{result:674 (52.3%)} {result:51 (34.5%)} {space 1}{result:1,189 (45.7%)}
+  Other{space 15} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+Event Decision{space 8} {space 13} {space 13} {space 10} {space 14}
+  Approve{space 13} {space 2}{result:331 (28.5%)} {space 2}{result:382 (30.9%)} {result:46 (34.8%)} {space 3}{result:759 (30.0%)}
+  Conditional Approval {space 2}{result:525 (45.2%)} {space 2}{result:559 (45.2%)} {result:58 (43.9%)} {space 1}{result:1,142 (45.1%)}
+  Return to RTO{space 7} {space 2}{result:207 (17.8%)} {space 2}{result:169 (13.7%)} {result:14 (10.6%)} {space 3}{result:390 (15.4%)}
+  Reassign{space 12} {space 4}{result:20 (1.7%)} {space 4}{result:39 (3.2%)} {space 2}{result:6 (4.5%)} {space 5}{result:65 (2.6%)}
+  Respond to Consult{space 2} {space 4}{result:67 (5.8%)} {space 4}{result:77 (6.2%)} {space 2}{result:8 (6.1%)} {space 4}{result:152 (6.0%)}
+  Withdrawn{space 11} {space 4}{result:12 (1.0%)} {space 5}{result:7 (0.6%)} {space 2}{result:0 (0.0%)} {space 5}{result:19 (0.8%)}
+  Add comment{space 9} {space 5}{result:0 (0.0%)} {space 5}{result:5 (0.4%)} {space 2}{result:0 (0.0%)} {space 6}{result:5 (0.2%)}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. encode tulipd, gen(tulipd2)
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. d tulipd*
+
+{txt}Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:tulipdecision  }{txt}{bind: str24   }{bind:%24s      }{space 1}{bind:         }{bind:  }{res}{res}TULIP Decision{p_end}
+{p 0 48}{bind:tulipd2        }{txt}{bind: long    }{bind:%24.0g    }{space 1}{bind:tulipd2  }{bind:  }{res}{res}TULIP Decision{p_end}
+
+{com}. label list tulipd2
+{txt}tulipd2:
+{res}           1 Add comment
+           2 Approve
+           3 Conditional Approval
+           4 Reassign
+           5 Reassign (with approval)
+           6 Respond to consult
+           7 Return to RTO
+           8 Withdrawn
+           9 Withrawn
+          10 product withdrawn
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. recode tulipd2 (8/10 = 6) (1=6) (2=1) (3=2) (7=3) (4=4) (5=4) , ///
+> gen(tld2)
+{txt}(2,369 differences between {bf:tulipd2} and {bf:tld2})
+
+{com}. 
+{txt}end of do-file
+
+{com}. tab tulipd tld2
+{bf}{err}tulipd{sf} ambiguous abbreviation
+{txt}{search r(111), local:r(111);}
+
+{com}. tab tulipd2 tld2
+
+                      {txt}{c |}     RECODE of tulipd2 (TULIP Decision)
+       TULIP Decision {c |}         1          2          3          4 {c |}     Total
+{hline 22}{c +}{hline 44}{c +}{hline 10}
+          Add comment {c |}{res}         0          0          0          0 {txt}{c |}{res}         5 
+{txt}              Approve {c |}{res}       772          0          0          0 {txt}{c |}{res}       772 
+{txt} Conditional Approval {c |}{res}         0      1,160          0          0 {txt}{c |}{res}     1,160 
+{txt}             Reassign {c |}{res}         0          0          0         51 {txt}{c |}{res}        51 
+{txt}Reassign (with approv {c |}{res}         0          0          0         15 {txt}{c |}{res}        15 
+{txt}   Respond to consult {c |}{res}         0          0          0          0 {txt}{c |}{res}       156 
+{txt}        Return to RTO {c |}{res}         0          0        398          0 {txt}{c |}{res}       398 
+{txt}            Withdrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}         3 
+{txt}             Withrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}         1 
+{txt}    product withdrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}        15 
+{txt}{hline 22}{c +}{hline 44}{c +}{hline 10}
+                Total {c |}{res}       772      1,160        398         66 {txt}{c |}{res}     2,576 
+
+
+                      {txt}{c |} RECODE of
+                      {c |}  tulipd2
+                      {c |}   (TULIP
+                      {c |} Decision)
+       TULIP Decision {c |}         6 {c |}     Total
+{hline 22}{c +}{hline 11}{c +}{hline 10}
+          Add comment {c |}{res}         5 {txt}{c |}{res}         5 
+{txt}              Approve {c |}{res}         0 {txt}{c |}{res}       772 
+{txt} Conditional Approval {c |}{res}         0 {txt}{c |}{res}     1,160 
+{txt}             Reassign {c |}{res}         0 {txt}{c |}{res}        51 
+{txt}Reassign (with approv {c |}{res}         0 {txt}{c |}{res}        15 
+{txt}   Respond to consult {c |}{res}       156 {txt}{c |}{res}       156 
+{txt}        Return to RTO {c |}{res}         0 {txt}{c |}{res}       398 
+{txt}            Withdrawn {c |}{res}         3 {txt}{c |}{res}         3 
+{txt}             Withrawn {c |}{res}         1 {txt}{c |}{res}         1 
+{txt}    product withdrawn {c |}{res}        15 {txt}{c |}{res}        15 
+{txt}{hline 22}{c +}{hline 11}{c +}{hline 10}
+                Total {c |}{res}       180 {txt}{c |}{res}     2,576 
+
+{com}. tab tld2
+
+  {txt}RECODE of {c |}
+    tulipd2 {c |}
+     (TULIP {c |}
+  Decision) {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+          1 {c |}{res}        772       29.97       29.97
+{txt}          2 {c |}{res}      1,160       45.03       75.00
+{txt}          3 {c |}{res}        398       15.45       90.45
+{txt}          4 {c |}{res}         66        2.56       93.01
+{txt}          6 {c |}{res}        180        6.99      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      2,576      100.00
+
+{com}. tab decision
+
+      {txt}Event Decision {c |}      Freq.     Percent        Cum.
+{hline 21}{c +}{hline 35}
+             Approve {c |}{res}        772       29.97       29.97
+{txt}Conditional Approval {c |}{res}      1,160       45.03       75.00
+{txt}       Return to RTO {c |}{res}        398       15.45       90.45
+{txt}            Reassign {c |}{res}         66        2.56       93.01
+{txt}  Respond to Consult {c |}{res}        156        6.06       99.07
+{txt}           Withdrawn {c |}{res}         19        0.74       99.81
+{txt}         Add comment {c |}{res}          5        0.19      100.00
+{txt}{hline 21}{c +}{hline 35}
+               Total {c |}{res}      2,576      100.00
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. recode tulipd2 (8/10 = 6) (1=6) (2=1) (3=2) (7=3) (4=4) (5=4) (6=5) , ///
+> gen(tld3)
+{txt}(2,525 differences between {bf:tulipd2} and {bf:tld3})
+
+{com}. 
+{txt}end of do-file
+
+{com}. tab tulipd2 tld3
+
+                      {txt}{c |}     RECODE of tulipd2 (TULIP Decision)
+       TULIP Decision {c |}         1          2          3          4 {c |}     Total
+{hline 22}{c +}{hline 44}{c +}{hline 10}
+          Add comment {c |}{res}         0          0          0          0 {txt}{c |}{res}         5 
+{txt}              Approve {c |}{res}       772          0          0          0 {txt}{c |}{res}       772 
+{txt} Conditional Approval {c |}{res}         0      1,160          0          0 {txt}{c |}{res}     1,160 
+{txt}             Reassign {c |}{res}         0          0          0         51 {txt}{c |}{res}        51 
+{txt}Reassign (with approv {c |}{res}         0          0          0         15 {txt}{c |}{res}        15 
+{txt}   Respond to consult {c |}{res}         0          0          0          0 {txt}{c |}{res}       156 
+{txt}        Return to RTO {c |}{res}         0          0        398          0 {txt}{c |}{res}       398 
+{txt}            Withdrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}         3 
+{txt}             Withrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}         1 
+{txt}    product withdrawn {c |}{res}         0          0          0          0 {txt}{c |}{res}        15 
+{txt}{hline 22}{c +}{hline 44}{c +}{hline 10}
+                Total {c |}{res}       772      1,160        398         66 {txt}{c |}{res}     2,576 
+
+
+                      {txt}{c |}   RECODE of tulipd2
+                      {c |}   (TULIP Decision)
+       TULIP Decision {c |}         5          6 {c |}     Total
+{hline 22}{c +}{hline 22}{c +}{hline 10}
+          Add comment {c |}{res}         0          5 {txt}{c |}{res}         5 
+{txt}              Approve {c |}{res}         0          0 {txt}{c |}{res}       772 
+{txt} Conditional Approval {c |}{res}         0          0 {txt}{c |}{res}     1,160 
+{txt}             Reassign {c |}{res}         0          0 {txt}{c |}{res}        51 
+{txt}Reassign (with approv {c |}{res}         0          0 {txt}{c |}{res}        15 
+{txt}   Respond to consult {c |}{res}       156          0 {txt}{c |}{res}       156 
+{txt}        Return to RTO {c |}{res}         0          0 {txt}{c |}{res}       398 
+{txt}            Withdrawn {c |}{res}         0          3 {txt}{c |}{res}         3 
+{txt}             Withrawn {c |}{res}         0          1 {txt}{c |}{res}         1 
+{txt}    product withdrawn {c |}{res}         0         15 {txt}{c |}{res}        15 
+{txt}{hline 22}{c +}{hline 22}{c +}{hline 10}
+                Total {c |}{res}       156         24 {txt}{c |}{res}     2,576 
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. drop tld*
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. recode tld2 (6=5) , ///
+> gen(tld3)
+{err}variable {bf}tld2{sf} not found
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. recode tulipd2 (8/10 = 6) (1=6) (2=1) (3=2) (7=3) (4=4) (5=4) , ///
+> gen(tld2)
+{txt}(2,369 differences between {bf:tulipd2} and {bf:tld2})
+
+{com}. 
+. recode tld2 (6=5) , ///
+> gen(tld3)
+{txt}(180 differences between {bf:tld2} and {bf:tld3})
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. tab tld3 tulipd2
+
+ {txt}RECODE of {c |}
+      tld2 {c |}
+(RECODE of {c |}
+   tulipd2 {c |}
+    (TULIP {c |}                     TULIP Decision
+Decision)) {c |} Add comme    Approve  Condition   Reassign  Reassign  {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+         1 {c |}{res}         0        772          0          0          0 {txt}{c |}{res}       772 
+{txt}         2 {c |}{res}         0          0      1,160          0          0 {txt}{c |}{res}     1,160 
+{txt}         3 {c |}{res}         0          0          0          0          0 {txt}{c |}{res}       398 
+{txt}         4 {c |}{res}         0          0          0         51         15 {txt}{c |}{res}        66 
+{txt}         5 {c |}{res}         5          0          0          0          0 {txt}{c |}{res}       180 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}         5        772      1,160         51         15 {txt}{c |}{res}     2,576 
+
+
+ {txt}RECODE of {c |}
+      tld2 {c |}
+(RECODE of {c |}
+   tulipd2 {c |}
+    (TULIP {c |}                     TULIP Decision
+Decision)) {c |} Respond t  Return to  Withdrawn   Withrawn  product w {c |}     Total
+{hline 11}{c +}{hline 55}{c +}{hline 10}
+         1 {c |}{res}         0          0          0          0          0 {txt}{c |}{res}       772 
+{txt}         2 {c |}{res}         0          0          0          0          0 {txt}{c |}{res}     1,160 
+{txt}         3 {c |}{res}         0        398          0          0          0 {txt}{c |}{res}       398 
+{txt}         4 {c |}{res}         0          0          0          0          0 {txt}{c |}{res}        66 
+{txt}         5 {c |}{res}       156          0          3          1         15 {txt}{c |}{res}       180 
+{txt}{hline 11}{c +}{hline 55}{c +}{hline 10}
+     Total {c |}{res}       156        398          3          1         15 {txt}{c |}{res}     2,576 
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. drop tld*
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. recode tulipd2 (8/10 = 6) (1=6) (2=1) (3=2) (7=3) (4=4) (5=4) , ///
+> gen(tld2)
+{txt}(2,369 differences between {bf:tulipd2} and {bf:tld2})
+
+{com}. 
+. recode tld2 (6=5) , ///
+> gen(decision)
+{err}variable {bf}decision{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. drop tld2
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. encode tulipd, gen(tulipd2)
+{bf}{err}tulipd{sf} ambiguous abbreviation
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. capture drop tld* decision tulipd2
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. encode tulipd, gen(tulipd2)
+{bf}{err}tulipd{sf} ambiguous abbreviation
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. d tulip*
+
+{txt}Variable      Storage   Display    Value
+    name         type    format    label      Variable label
+{hline}
+{p 0 48}{res}{bind:tulipid        }{txt}{bind: str26   }{bind:%26s      }{space 1}{bind:         }{bind:  }{res}{res}TULIP ID{p_end}
+{p 0 48}{bind:tulipdecision  }{txt}{bind: str24   }{bind:%24s      }{space 1}{bind:         }{bind:  }{res}{res}TULIP Decision{p_end}
+{p 0 48}{bind:tulipconsulta~p}{txt}{bind: str12   }{bind:%12s      }{space 1}{bind:         }{bind:  }{res}{res}TULIP Consultation to QSP{p_end}
+{p 0 48}{bind:tulipd2        }{txt}{bind: long    }{bind:%24.0g    }{space 1}{bind:tulipd2  }{bind:  }{res}{res}TULIP Decision{p_end}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. capture drop tld* decision tulipd2
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. encode tulipd, gen(tulipd2)
+{bf}{err}tulipd{sf} ambiguous abbreviation
+{txt}{search r(111), local:r(111);}
+
+end of do-file
+
+{search r(111), local:r(111);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. drop tulipd2
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. encode tulipd, gen(tulipd2)
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. 
+. recode tulipd2 (8/10 = 6) (1=6) (2=1) (3=2) (7=3) (4=4) (5=4) , ///
+> gen(tld2)
+{txt}(2,369 differences between {bf:tulipd2} and {bf:tld2})
+
+{com}. 
+. recode tld2 (6=5) , ///
+> gen(decision)
+{err}variable {bf}decision{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. capture drop decision
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. recode tld2 (6=5) , ///
+> gen(decision)
+{txt}(180 differences between {bf:tld2} and {bf:decision})
+
+{com}. drop tld2
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}.         label drop decision
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}.         label define decision 1 "Approve" 2 "Conditional Approval" 3 "Return to RTO" 4 "Reassign" ///
+>         5 "Respond to Consult"
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}.         label values decision decision
+{txt}
+{com}. 
+.         la var decision "Event Decision"
+{txt}
+{com}. 
+.                         drop tulipd2
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. tab dec
+
+      {txt}Event Decision {c |}      Freq.     Percent        Cum.
+{hline 21}{c +}{hline 35}
+             Approve {c |}{res}        772       29.97       29.97
+{txt}Conditional Approval {c |}{res}      1,160       45.03       75.00
+{txt}       Return to RTO {c |}{res}        398       15.45       90.45
+{txt}            Reassign {c |}{res}         66        2.56       93.01
+{txt}  Respond to Consult {c |}{res}        180        6.99      100.00
+{txt}{hline 21}{c +}{hline 35}
+               Total {c |}{res}      2,576      100.00
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.phase i.decision, by(year_sub) name(all_data)
+{err}{p 0 0 2}
+collection {bf:all_data} already exists and is not empty{p_end}
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. * Table 1: All data
+. dtable i.phase i.decision, by(year_sub) name(all_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 23}year_sub{space 22}
+{space 22} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:1,203 (45.4%)} {result:1,294 (48.9%)} {result:150 (5.7%)} {result:2,647 (100.0%)}
+Phase{space 17} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 12} {space 2}{result:711 (59.1%)} {space 2}{result:607 (46.9%)} {result:99 (66.0%)} {space 1}{result:1,417 (53.5%)}
+  Executive{space 11} {space 2}{result:480 (39.9%)} {space 2}{result:676 (52.2%)} {result:51 (34.0%)} {space 1}{result:1,207 (45.6%)}
+  Other{space 15} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+Event Decision{space 8} {space 13} {space 13} {space 10} {space 14}
+  Approve{space 13} {space 2}{result:344 (28.6%)} {space 2}{result:382 (30.8%)} {result:46 (34.6%)} {space 3}{result:772 (30.0%)}
+  Conditional Approval {space 2}{result:540 (45.0%)} {space 2}{result:561 (45.2%)} {result:59 (44.4%)} {space 1}{result:1,160 (45.0%)}
+  Return to RTO{space 7} {space 2}{result:213 (17.7%)} {space 2}{result:171 (13.8%)} {result:14 (10.5%)} {space 3}{result:398 (15.5%)}
+  Reassign{space 12} {space 4}{result:21 (1.7%)} {space 4}{result:39 (3.1%)} {space 2}{result:6 (4.5%)} {space 5}{result:66 (2.6%)}
+  Respond to Consult{space 2} {space 4}{result:83 (6.9%)} {space 4}{result:89 (7.2%)} {space 2}{result:8 (6.0%)} {space 4}{result:180 (7.0%)}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. dtable i.phase i.decision if wf_seq2 == 1, by(year_sub) name(filtered_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 23}year_sub{space 22}
+{space 22} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:1,164 (44.8%)} {result:1,289 (49.6%)} {result:148 (5.7%)} {result:2,601 (100.0%)}
+Phase{space 17} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 12} {space 2}{result:688 (59.1%)} {space 2}{result:604 (46.9%)} {result:97 (65.5%)} {space 1}{result:1,389 (53.4%)}
+  Executive{space 11} {space 2}{result:464 (39.9%)} {space 2}{result:674 (52.3%)} {result:51 (34.5%)} {space 1}{result:1,189 (45.7%)}
+  Other{space 15} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+Event Decision{space 8} {space 13} {space 13} {space 10} {space 14}
+  Approve{space 13} {space 2}{result:331 (28.5%)} {space 2}{result:382 (30.9%)} {result:46 (34.8%)} {space 3}{result:759 (30.0%)}
+  Conditional Approval {space 2}{result:525 (45.2%)} {space 2}{result:559 (45.2%)} {result:58 (43.9%)} {space 1}{result:1,142 (45.1%)}
+  Return to RTO{space 7} {space 2}{result:207 (17.8%)} {space 2}{result:169 (13.7%)} {result:14 (10.6%)} {space 3}{result:390 (15.4%)}
+  Reassign{space 12} {space 4}{result:20 (1.7%)} {space 4}{result:39 (3.2%)} {space 2}{result:6 (4.5%)} {space 5}{result:65 (2.6%)}
+  Respond to Consult{space 2} {space 4}{result:79 (6.8%)} {space 4}{result:89 (7.2%)} {space 2}{result:8 (6.1%)} {space 4}{result:176 (7.0%)}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. * Table 3 : Decisions by year
+. collect clear
+{res}{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product")
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Planning Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 21}year_sub{space 20}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:663 (52.2%)} {result:531 (41.8%)} {space 1}{result:75 (5.9%)} {result:1,269 (100.0%)}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14}
+  Approve{space 13} {result:201 (30.3%)} {result:137 (25.8%)} {result:19 (25.3%)} {space 3}{result:357 (28.1%)}
+  Conditional Approval {result:301 (45.4%)} {result:293 (55.2%)} {result:43 (57.3%)} {space 3}{result:637 (50.2%)}
+  Return to RTO{space 7} {result:161 (24.3%)} {result:101 (19.0%)} {result:13 (17.3%)} {space 3}{result:275 (21.7%)}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==2, ///
+>         by(year_sub) name(filtered_decision) ///
+>         title("Table 3 Executive Phase : Initial Decision by Year per unique product")
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Executive Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 21}year_sub{space 20}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:400 (39.2%)} {result:577 (56.6%)} {space 1}{result:43 (4.2%)} {result:1,020 (100.0%)}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14}
+  Approve{space 13} {result:130 (32.5%)} {result:243 (42.1%)} {result:27 (62.8%)} {space 3}{result:400 (39.2%)}
+  Conditional Approval {result:224 (56.0%)} {result:266 (46.1%)} {result:15 (34.9%)} {space 3}{result:505 (49.5%)}
+  Return to RTO{space 7} {space 1}{result:46 (11.5%)} {space 1}{result:68 (11.8%)} {space 2}{result:1 (2.3%)} {space 3}{result:115 (11.3%)}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==2, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 3 Executive Phase : Initial Decision by Year per unique product")
+{res}{txt}{p 0 6 2}
+note: using test {bf:pearson} across levels of {bf:year_sub} for {bf:decision}.
+{p_end}
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Executive Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+{space 22} {space 24}year_sub{space 24}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4} {space 1}Test{space 1}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+N{space 21} {result:400 (39.2%)} {result:577 (56.6%)} {space 1}{result:43 (4.2%)} {result:1,020 (100.0%)} {space 6}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14} {space 6}
+  Approve{space 13} {result:130 (32.5%)} {result:243 (42.1%)} {result:27 (62.8%)} {space 3}{result:400 (39.2%)} {result:<0.001}
+  Conditional Approval {result:224 (56.0%)} {result:266 (46.1%)} {result:15 (34.9%)} {space 3}{result:505 (49.5%)} {space 6}
+  Return to RTO{space 7} {space 1}{result:46 (11.5%)} {space 1}{result:68 (11.8%)} {space 2}{result:1 (2.3%)} {space 3}{result:115 (11.3%)} {space 6}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. nptrend decision ///
+>         if phase==2 & wf_seq2==1 & inlist(decision, 1, 2, 3), ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,020
+         {txt}Number of groups =         {res}3
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5}     1.79{space 5}      400
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.696707{space 5}      577
+{txt}{space 2}     2026  {c |}{res}{space 5}     2026{space 5} 1.395349{space 5}       43
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-17.85784
+                {txt}Std. err. =   {res}4.65537
+                        {txt}z =    {res}-3.836
+               {txt}Prob > |z| = {res}   0.0001
+{txt}
+{com}.         
+. local trendp1 =r(p)
+{txt}
+{com}.         
+. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table3.docx, replace) ///
+>         notes(Test for trend p=`trendp1')
+{err}{p 0 0 2}
+collection {bf:filtered_decision} already exists and is not empty{p_end}
+{txt}{search r(110), local:r(110);}
+
+end of do-file
+
+{search r(110), local:r(110);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. 
+. nptrend decision ///
+>         if phase==2 & wf_seq2==1 & inlist(decision, 1, 2, 3), ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,020
+         {txt}Number of groups =         {res}3
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5}     1.79{space 5}      400
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.696707{space 5}      577
+{txt}{space 2}     2026  {c |}{res}{space 5}     2026{space 5} 1.395349{space 5}       43
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-17.85784
+                {txt}Std. err. =   {res}4.65537
+                        {txt}z =    {res}-3.836
+               {txt}Prob > |z| = {res}   0.0001
+{txt}
+{com}.         
+. local trendp1 =r(p)
+{txt}
+{com}.         
+. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table3.docx, replace) ///
+>         notes(Test for trend p=`trendp1')
+{res}{txt}{p 0 6 2}
+note: using test {bf:pearson} across levels of {bf:year_sub} for {bf:decision}.
+{p_end}
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Planning Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+{space 22} {space 24}year_sub{space 23}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4} {space 1}Test
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+N{space 21} {result:663 (52.2%)} {result:531 (41.8%)} {space 1}{result:75 (5.9%)} {result:1,269 (100.0%)} {space 5}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14} {space 5}
+  Approve{space 13} {result:201 (30.3%)} {result:137 (25.8%)} {result:19 (25.3%)} {space 3}{result:357 (28.1%)} {result:0.010}
+  Conditional Approval {result:301 (45.4%)} {result:293 (55.2%)} {result:43 (57.3%)} {space 3}{result:637 (50.2%)} {space 5}
+  Return to RTO{space 7} {result:161 (24.3%)} {result:101 (19.0%)} {result:13 (17.3%)} {space 3}{result:275 (21.7%)} {space 5}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+{p 0 0 0 78}Test for trend p=.0001250714178655{p_end}
+{res}{txt}{p 0 1 2}
+(collection {res:filtered_decision} exported to file {browse "/Users/juansolon/github/personal/whoqa/docs/table3.docx":docs/table3.docx})
+{p_end}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. 
+. nptrend decision ///
+>         if phase==1 & wf_seq2==1 & inlist(decision, 1, 2, 3), ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,269
+         {txt}Number of groups =         {res}3
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5} 1.939668{space 5}      663
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.932203{space 5}      531
+{txt}{space 2}     2026  {c |}{res}{space 5}     2026{space 5}     1.92{space 5}       75
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-.8999212
+                {txt}Std. err. =  {res}5.714513
+                        {txt}z =    {res}-0.157
+               {txt}Prob > |z| = {res}   0.8749
+{txt}
+{com}.         
+. local trendp1 =r(p)
+{txt}
+{com}.         
+. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table3.docx, replace) ///
+>         notes(Test for trend p=`trendp1')
+{res}{txt}{p 0 6 2}
+note: using test {bf:pearson} across levels of {bf:year_sub} for {bf:decision}.
+{p_end}
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Planning Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+{space 22} {space 24}year_sub{space 23}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4} {space 1}Test
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+N{space 21} {result:663 (52.2%)} {result:531 (41.8%)} {space 1}{result:75 (5.9%)} {result:1,269 (100.0%)} {space 5}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14} {space 5}
+  Approve{space 13} {result:201 (30.3%)} {result:137 (25.8%)} {result:19 (25.3%)} {space 3}{result:357 (28.1%)} {result:0.010}
+  Conditional Approval {result:301 (45.4%)} {result:293 (55.2%)} {result:43 (57.3%)} {space 3}{result:637 (50.2%)} {space 5}
+  Return to RTO{space 7} {result:161 (24.3%)} {result:101 (19.0%)} {result:13 (17.3%)} {space 3}{result:275 (21.7%)} {space 5}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+{p 0 0 0 78}Test for trend p=.8748666193067374{p_end}
+{res}{txt}{p 0 1 2}
+(collection {res:filtered_decision} exported to file {browse "/Users/juansolon/github/personal/whoqa/docs/table3.docx":docs/table3.docx})
+{p_end}
+
+{com}.         
+.         
+. * Table 4 : Decisions by year, Executive
+. 
+. nptrend decision ///
+>         if phase==2 & wf_seq2==1 & inlist(decision, 1, 2, 3), ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,020
+         {txt}Number of groups =         {res}3
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5}     1.79{space 5}      400
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.696707{space 5}      577
+{txt}{space 2}     2026  {c |}{res}{space 5}     2026{space 5} 1.395349{space 5}       43
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-17.85784
+                {txt}Std. err. =   {res}4.65537
+                        {txt}z =    {res}-3.836
+               {txt}Prob > |z| = {res}   0.0001
+{txt}
+{com}. local trendp2 =r(p)
+{txt}
+{com}. 
+. collect clear
+{res}{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==2, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 4 Executive Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table3.docx, replace) ///
+>         notes(Test for trend p=`trendp2')
+{res}{txt}{p 0 6 2}
+note: using test {bf:pearson} across levels of {bf:year_sub} for {bf:decision}.
+{p_end}
+{res}
+{smcl}
+{reset}{...}
+{p}Table 4 Executive Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+{space 22} {space 24}year_sub{space 24}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4} {space 1}Test{space 1}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+N{space 21} {result:400 (39.2%)} {result:577 (56.6%)} {space 1}{result:43 (4.2%)} {result:1,020 (100.0%)} {space 6}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14} {space 6}
+  Approve{space 13} {result:130 (32.5%)} {result:243 (42.1%)} {result:27 (62.8%)} {space 3}{result:400 (39.2%)} {result:<0.001}
+  Conditional Approval {result:224 (56.0%)} {result:266 (46.1%)} {result:15 (34.9%)} {space 3}{result:505 (49.5%)} {space 6}
+  Return to RTO{space 7} {space 1}{result:46 (11.5%)} {space 1}{result:68 (11.8%)} {space 2}{result:1 (2.3%)} {space 3}{result:115 (11.3%)} {space 6}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+{p 0 0 0 79}Test for trend p=.0001250714178655{p_end}
+{res}{txt}{p 0 1 2}
+(collection {res:filtered_decision} exported to file {browse "/Users/juansolon/github/personal/whoqa/docs/table3.docx":docs/table3.docx})
+{p_end}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==2, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 4 Executive Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table4.docx, replace) ///
+>         notes(Test for trend p=`trendp2')
+{res}{txt}{p 0 6 2}
+note: using test {bf:pearson} across levels of {bf:year_sub} for {bf:decision}.
+{p_end}
+{res}
+{smcl}
+{reset}{...}
+{p}Table 4 Executive Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+{space 22} {space 24}year_sub{space 24}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4} {space 1}Test{space 1}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+N{space 21} {result:400 (39.2%)} {result:577 (56.6%)} {space 1}{result:43 (4.2%)} {result:1,020 (100.0%)} {space 6}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14} {space 6}
+  Approve{space 13} {result:130 (32.5%)} {result:243 (42.1%)} {result:27 (62.8%)} {space 3}{result:400 (39.2%)} {result:<0.001}
+  Conditional Approval {result:224 (56.0%)} {result:266 (46.1%)} {result:15 (34.9%)} {space 3}{result:505 (49.5%)} {space 6}
+  Return to RTO{space 7} {space 1}{result:46 (11.5%)} {space 1}{result:68 (11.8%)} {space 2}{result:1 (2.3%)} {space 3}{result:115 (11.3%)} {space 6}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+{p 0 0 0 79}Test for trend p={p_end}
+{res}{txt}{p 0 1 2}
+(collection {res:filtered_decision} exported to file {browse "/Users/juansolon/github/personal/whoqa/docs/table4.docx":docs/table4.docx})
+{p_end}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. 
+. nptrend decision ///
+>         if phase==1 & wf_seq2==1 & inlist(decision, 1, 2, 3), ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,269
+         {txt}Number of groups =         {res}3
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5} 1.939668{space 5}      663
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.932203{space 5}      531
+{txt}{space 2}     2026  {c |}{res}{space 5}     2026{space 5}     1.92{space 5}       75
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-.8999212
+                {txt}Std. err. =  {res}5.714513
+                        {txt}z =    {res}-0.157
+               {txt}Prob > |z| = {res}   0.8749
+{txt}
+{com}.         
+. local trendp1 =r(p) display %9.4f r(p)
+{err}invalid 'display' 
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==1, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 3 Planning Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table3.docx, replace) ///
+>         notes(Test for trend p=`trendp1')
+{res}{txt}{p 0 6 2}
+note: using test {bf:pearson} across levels of {bf:year_sub} for {bf:decision}.
+{p_end}
+{res}
+{smcl}
+{reset}{...}
+{p}Table 3 Planning Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+{space 22} {space 24}year_sub{space 23}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4} {space 1}Test
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+N{space 21} {result:663 (52.2%)} {result:531 (41.8%)} {space 1}{result:75 (5.9%)} {result:1,269 (100.0%)} {space 5}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14} {space 5}
+  Approve{space 13} {result:201 (30.3%)} {result:137 (25.8%)} {result:19 (25.3%)} {space 3}{result:357 (28.1%)} {result:0.010}
+  Conditional Approval {result:301 (45.4%)} {result:293 (55.2%)} {result:43 (57.3%)} {space 3}{result:637 (50.2%)} {space 5}
+  Return to RTO{space 7} {result:161 (24.3%)} {result:101 (19.0%)} {result:13 (17.3%)} {space 3}{result:275 (21.7%)} {space 5}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 5}
+{p 0 0 0 78}Test for trend p={p_end}
+{res}{txt}{p 0 1 2}
+(collection {res:filtered_decision} exported to file {browse "/Users/juansolon/github/personal/whoqa/docs/table3.docx":docs/table3.docx})
+{p_end}
+
+{com}.         
+.         
+. * Table 4 : Decisions by year, Executive
+. 
+. nptrend decision ///
+>         if phase==2 & wf_seq2==1 & inlist(decision, 1, 2, 3), ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,020
+         {txt}Number of groups =         {res}3
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5}     1.79{space 5}      400
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.696707{space 5}      577
+{txt}{space 2}     2026  {c |}{res}{space 5}     2026{space 5} 1.395349{space 5}       43
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-17.85784
+                {txt}Std. err. =   {res}4.65537
+                        {txt}z =    {res}-3.836
+               {txt}Prob > |z| = {res}   0.0001
+{txt}
+{com}. local trendp2 =r(p) : display %9.4f r(p)
+{err}invalid syntax
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. 
+. nptrend decision ///
+>         if phase==1 & wf_seq2==1 & inlist(decision, 1, 2, 3) & year_sub!=2026, ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,194
+         {txt}Number of groups =         {res}2
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5} 1.939668{space 5}      663
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.932203{space 5}      531
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-.3651591
+                {txt}Std. err. =  {res}4.554784
+                        {txt}z =    {res}-0.080
+               {txt}Prob > |z| = {res}   0.9361
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. nptrend decision ///
+>         if phase==1 & wf_seq2==1 & inlist(decision, 1, 2, 3), ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =     {res}1,269
+         {txt}Number of groups =         {res}3
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5} 1.939668{space 5}      663
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.932203{space 5}      531
+{txt}{space 2}     2026  {c |}{res}{space 5}     2026{space 5}     1.92{space 5}       75
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-.8999212
+                {txt}Std. err. =  {res}5.714513
+                        {txt}z =    {res}-0.157
+               {txt}Prob > |z| = {res}   0.8749
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. nptrend decision ///
+>         if phase==2 & wf_seq2==1 & inlist(decision, 1, 2, 3) & year_sub!=2026, ///
+>         group(year) cuzick
+
+{txt}Cuzick's test with rank scores
+
+   Number of observations =       {res}977
+         {txt}Number of groups =         {res}2
+{txt}Number of response levels =         {res}3
+
+{txt}{hline 13}{c TT}{hline 42}
+{col 13} {c |}{space 24}Mean
+{col 13} {c |}{space 20}response{space 8}Number
+{col 7} Group {c |}{space 3}Group score{space 9}score{space 8}of obs
+{hline 13}{c +}{hline 42}
+    year_sub {c |}
+{space 2}     2024  {c |}{res}{space 5}     2024{space 5}     1.79{space 5}      400
+{txt}{space 2}     2025  {c |}{res}{space 5}     2025{space 5} 1.696707{space 5}      577
+{txt}{hline 13}{c BT}{hline 42}
+
+                Statistic = {res}-9.822927
+                {txt}Std. err. =  {res}4.011525
+                        {txt}z =    {res}-2.449
+               {txt}Prob > |z| = {res}   0.0143
+{txt}
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==2, ///
+>         by(year_sub unit, tests) name(filtered_decision) ///
+>         title("Table 4 Executive Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table4.docx, replace) ///
+>         notes(Test for trend p=`trendp2' and p = `trendp3' without 2026)
+{err}too many variables specified
+in option {bf:by()}
+{txt}{search r(103), local:r(103);}
+
+end of do-file
+
+{search r(103), local:r(103);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.decision i.unit  ///
+>         if wf_seq2==1 & ///
+>         inlist(decision, 1, 2, 3) & ///
+>         phase==2, ///
+>         by(year_sub, tests) name(filtered_decision) ///
+>         title("Table 4 Executive Phase : Initial Decision by Year per unique product") ///
+>         export(docs/table4.docx, replace) ///
+>         notes(Test for trend p=`trendp2' and p = `trendp3' without 2026)
+{res}{txt}{p 0 6 2}
+note: using test {bf:pearson} across levels of {bf:year_sub} for {bf:decision} and {bf:unit}.
+{p_end}
+{res}
+{smcl}
+{reset}{...}
+{p}Table 4 Executive Phase : Initial Decision by Year per unique product{p_end}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+{space 22} {space 24}year_sub{space 24}
+{space 22} {space 4}2024{space 3} {space 4}2025{space 3} {space 3}2026{space 3} {space 5}Total{space 4} {space 1}Test{space 1}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+N{space 21} {result:400 (39.2%)} {result:577 (56.6%)} {space 1}{result:43 (4.2%)} {result:1,020 (100.0%)} {space 6}
+Event Decision{space 8} {space 11} {space 11} {space 10} {space 14} {space 6}
+  Approve{space 13} {result:130 (32.5%)} {result:243 (42.1%)} {result:27 (62.8%)} {space 3}{result:400 (39.2%)} {result:<0.001}
+  Conditional Approval {result:224 (56.0%)} {result:266 (46.1%)} {result:15 (34.9%)} {space 3}{result:505 (49.5%)} {space 6}
+  Return to RTO{space 7} {space 1}{result:46 (11.5%)} {space 1}{result:68 (11.8%)} {space 2}{result:1 (2.3%)} {space 3}{result:115 (11.3%)} {space 6}
+Division{space 14} {space 11} {space 11} {space 10} {space 14} {space 6}
+  GPA{space 17} {space 3}{result:9 (2.2%)} {space 3}{result:8 (1.4%)} {space 2}{result:2 (4.7%)} {space 5}{result:19 (1.9%)} {space 1}{result:0.108}
+  WHE{space 17} {space 1}{result:76 (19.0%)} {space 1}{result:87 (15.1%)} {space 1}{result:7 (16.3%)} {space 3}{result:170 (16.7%)} {space 6}
+  HSD{space 17} {space 1}{result:93 (23.2%)} {result:133 (23.1%)} {space 1}{result:6 (14.0%)} {space 3}{result:232 (22.7%)} {space 6}
+  PPC{space 17} {result:215 (53.8%)} {result:318 (55.1%)} {result:25 (58.1%)} {space 3}{result:558 (54.7%)} {space 6}
+  SCI{space 17} {space 3}{result:7 (1.8%)} {space 2}{result:30 (5.2%)} {space 2}{result:3 (7.0%)} {space 5}{result:40 (3.9%)} {space 6}
+  6{space 19} {space 3}{result:0 (0.0%)} {space 3}{result:1 (0.2%)} {space 2}{result:0 (0.0%)} {space 6}{result:1 (0.1%)} {space 6}
+{hline 22}{c -}{hline 11}{c -}{hline 11}{c -}{hline 10}{c -}{hline 14}{c -}{hline 6}
+{p 0 0 0 79}Test for trend p= and p = without 2026{p_end}
+{res}{txt}{p 0 1 2}
+(collection {res:filtered_decision} exported to file {browse "/Users/juansolon/github/personal/whoqa/docs/table4.docx":docs/table4.docx})
+{p_end}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub)
+{res}
+{smcl}
+{reset}{...}
+{hline 26}{c -}{c TT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+{space 26} {c |}  {space 10}year_sub{space 10}
+{space 26} {c |}  {space 1}2024   {space 1}2025   2026   Total
+{hline 26}{c -}{c +}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+Division{space 18} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+  GPA{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 4}{result:3}   {space 5}   {space 3}{result:3}   {space 4}{result:6}
+      Conditional Approval {c |}  {space 3}{result:12}   {space 3}{result:12}   {space 3}{result:1}   {space 3}{result:25}
+      Return to RTO{space 7} {c |}  {space 4}{result:3}   {space 4}{result:4}   {space 4}   {space 4}{result:7}
+      Reassign{space 12} {c |}  {space 4}{result:1}   {space 5}   {space 4}   {space 4}{result:1}
+      Respond to Consult{space 2} {c |}  {space 4}{result:4}   {space 4}{result:4}   {space 4}   {space 4}{result:8}
+      Total{space 15} {c |}  {space 3}{result:23}   {space 3}{result:20}   {space 3}{result:4}   {space 3}{result:47}
+  WHE{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:43}   {space 3}{result:51}   {space 2}{result:10}   {space 2}{result:104}
+      Conditional Approval {c |}  {space 2}{result:119}   {space 2}{result:109}   {space 2}{result:17}   {space 2}{result:245}
+      Return to RTO{space 7} {c |}  {space 3}{result:39}   {space 3}{result:34}   {space 3}{result:3}   {space 3}{result:76}
+      Reassign{space 12} {c |}  {space 4}{result:7}   {space 4}{result:2}   {space 3}{result:1}   {space 3}{result:10}
+      Respond to Consult{space 2} {c |}  {space 3}{result:15}   {space 3}{result:18}   {space 3}{result:1}   {space 3}{result:34}
+      Total{space 15} {c |}  {space 2}{result:223}   {space 2}{result:214}   {space 2}{result:32}   {space 2}{result:469}
+  HSD{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:105}   {space 2}{result:128}   {space 2}{result:10}   {space 2}{result:243}
+      Conditional Approval {c |}  {space 2}{result:111}   {space 2}{result:108}   {space 3}{result:7}   {space 2}{result:226}
+      Return to RTO{space 7} {c |}  {space 3}{result:55}   {space 3}{result:32}   {space 3}{result:3}   {space 3}{result:90}
+      Reassign{space 12} {c |}  {space 4}{result:4}   {space 4}{result:6}   {space 3}{result:1}   {space 3}{result:11}
+      Respond to Consult{space 2} {c |}  {space 3}{result:18}   {space 3}{result:26}   {space 3}{result:3}   {space 3}{result:47}
+      Total{space 15} {c |}  {space 2}{result:293}   {space 2}{result:300}   {space 2}{result:24}   {space 2}{result:617}
+  PPC{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:176}   {space 2}{result:174}   {space 2}{result:20}   {space 2}{result:370}
+      Conditional Approval {c |}  {space 2}{result:287}   {space 2}{result:304}   {space 2}{result:32}   {space 2}{result:623}
+      Return to RTO{space 7} {c |}  {space 2}{result:110}   {space 3}{result:89}   {space 3}{result:8}   {space 2}{result:207}
+      Reassign{space 12} {c |}  {space 4}{result:9}   {space 3}{result:31}   {space 3}{result:2}   {space 3}{result:42}
+      Respond to Consult{space 2} {c |}  {space 3}{result:43}   {space 3}{result:37}   {space 3}{result:4}   {space 3}{result:84}
+      Total{space 15} {c |}  {space 2}{result:625}   {space 2}{result:635}   {space 2}{result:66}   {result:1,326}
+  SCI{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:16}   {space 3}{result:28}   {space 3}{result:2}   {space 3}{result:46}
+      Conditional Approval {c |}  {space 3}{result:11}   {space 3}{result:26}   {space 3}{result:2}   {space 3}{result:39}
+      Return to RTO{space 7} {c |}  {space 4}{result:6}   {space 4}{result:8}   {space 4}   {space 3}{result:14}
+      Respond to Consult{space 2} {c |}  {space 4}{result:3}   {space 4}{result:4}   {space 4}   {space 4}{result:7}
+      Total{space 15} {c |}  {space 3}{result:36}   {space 3}{result:66}   {space 3}{result:4}   {space 2}{result:106}
+  6{space 23} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 5}   {space 4}{result:1}   {space 3}{result:1}   {space 4}{result:2}
+      Conditional Approval {c |}  {space 5}   {space 4}{result:2}   {space 4}   {space 4}{result:2}
+      Return to RTO{space 7} {c |}  {space 5}   {space 4}{result:4}   {space 4}   {space 4}{result:4}
+      Reassign{space 12} {c |}  {space 5}   {space 5}   {space 3}{result:2}   {space 4}{result:2}
+      Total{space 15} {c |}  {space 5}   {space 4}{result:7}   {space 3}{result:3}   {space 3}{result:10}
+  Total{space 19} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:343}   {space 2}{result:382}   {space 2}{result:46}   {space 2}{result:771}
+      Conditional Approval {c |}  {space 2}{result:540}   {space 2}{result:561}   {space 2}{result:59}   {result:1,160}
+      Return to RTO{space 7} {c |}  {space 2}{result:213}   {space 2}{result:171}   {space 2}{result:14}   {space 2}{result:398}
+      Reassign{space 12} {c |}  {space 3}{result:21}   {space 3}{result:39}   {space 3}{result:6}   {space 3}{result:66}
+      Respond to Consult{space 2} {c |}  {space 3}{result:83}   {space 3}{result:89}   {space 3}{result:8}   {space 2}{result:180}
+      Total{space 15} {c |}  {result:1,200}   {result:1,242}   {space 1}{result:133}   {result:2,575}
+{hline 26}{c -}{c BT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub) if decision <4
+{res}
+{smcl}
+{reset}{...}
+{hline 26}{c -}{c TT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+{space 26} {c |}  {space 10}year_sub{space 10}
+{space 26} {c |}  {space 1}2024   {space 1}2025   2026   Total
+{hline 26}{c -}{c +}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+Division{space 18} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+  GPA{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 4}{result:3}   {space 5}   {space 3}{result:3}   {space 4}{result:6}
+      Conditional Approval {c |}  {space 3}{result:12}   {space 3}{result:12}   {space 3}{result:1}   {space 3}{result:25}
+      Return to RTO{space 7} {c |}  {space 4}{result:3}   {space 4}{result:4}   {space 4}   {space 4}{result:7}
+      Total{space 15} {c |}  {space 3}{result:18}   {space 3}{result:16}   {space 3}{result:4}   {space 3}{result:38}
+  WHE{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:43}   {space 3}{result:51}   {space 2}{result:10}   {space 2}{result:104}
+      Conditional Approval {c |}  {space 2}{result:119}   {space 2}{result:109}   {space 2}{result:17}   {space 2}{result:245}
+      Return to RTO{space 7} {c |}  {space 3}{result:39}   {space 3}{result:34}   {space 3}{result:3}   {space 3}{result:76}
+      Total{space 15} {c |}  {space 2}{result:201}   {space 2}{result:194}   {space 2}{result:30}   {space 2}{result:425}
+  HSD{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:105}   {space 2}{result:128}   {space 2}{result:10}   {space 2}{result:243}
+      Conditional Approval {c |}  {space 2}{result:111}   {space 2}{result:108}   {space 3}{result:7}   {space 2}{result:226}
+      Return to RTO{space 7} {c |}  {space 3}{result:55}   {space 3}{result:32}   {space 3}{result:3}   {space 3}{result:90}
+      Total{space 15} {c |}  {space 2}{result:271}   {space 2}{result:268}   {space 2}{result:20}   {space 2}{result:559}
+  PPC{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:176}   {space 2}{result:174}   {space 2}{result:20}   {space 2}{result:370}
+      Conditional Approval {c |}  {space 2}{result:287}   {space 2}{result:304}   {space 2}{result:32}   {space 2}{result:623}
+      Return to RTO{space 7} {c |}  {space 2}{result:110}   {space 3}{result:89}   {space 3}{result:8}   {space 2}{result:207}
+      Total{space 15} {c |}  {space 2}{result:573}   {space 2}{result:567}   {space 2}{result:60}   {result:1,200}
+  SCI{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:16}   {space 3}{result:28}   {space 3}{result:2}   {space 3}{result:46}
+      Conditional Approval {c |}  {space 3}{result:11}   {space 3}{result:26}   {space 3}{result:2}   {space 3}{result:39}
+      Return to RTO{space 7} {c |}  {space 4}{result:6}   {space 4}{result:8}   {space 4}   {space 3}{result:14}
+      Total{space 15} {c |}  {space 3}{result:33}   {space 3}{result:62}   {space 3}{result:4}   {space 3}{result:99}
+  6{space 23} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 5}   {space 4}{result:1}   {space 3}{result:1}   {space 4}{result:2}
+      Conditional Approval {c |}  {space 5}   {space 4}{result:2}   {space 4}   {space 4}{result:2}
+      Return to RTO{space 7} {c |}  {space 5}   {space 4}{result:4}   {space 4}   {space 4}{result:4}
+      Total{space 15} {c |}  {space 5}   {space 4}{result:7}   {space 3}{result:1}   {space 4}{result:8}
+  Total{space 19} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:343}   {space 2}{result:382}   {space 2}{result:46}   {space 2}{result:771}
+      Conditional Approval {c |}  {space 2}{result:540}   {space 2}{result:561}   {space 2}{result:59}   {result:1,160}
+      Return to RTO{space 7} {c |}  {space 2}{result:213}   {space 2}{result:171}   {space 2}{result:14}   {space 2}{result:398}
+      Total{space 15} {c |}  {result:1,096}   {result:1,114}   {space 1}{result:119}   {result:2,329}
+{hline 26}{c -}{c BT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub) if decision ==3
+{res}
+{smcl}
+{reset}{...}
+{hline 19}{c -}{c TT}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+{space 19} {c |}  {space 9}year_sub{space 9}
+{space 19} {c |}  2024   2025   2026   Total
+{hline 19}{c -}{c +}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+Division{space 11} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+  GPA{space 14} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 1} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO {c |}  {space 3}{result:3}   {space 3}{result:4}   {space 4}   {space 4}{result:7}
+      Total{space 8} {c |}  {space 3}{result:3}   {space 3}{result:4}   {space 4}   {space 4}{result:7}
+  WHE{space 14} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 1} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO {c |}  {space 2}{result:39}   {space 2}{result:34}   {space 3}{result:3}   {space 3}{result:76}
+      Total{space 8} {c |}  {space 2}{result:39}   {space 2}{result:34}   {space 3}{result:3}   {space 3}{result:76}
+  HSD{space 14} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 1} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO {c |}  {space 2}{result:55}   {space 2}{result:32}   {space 3}{result:3}   {space 3}{result:90}
+      Total{space 8} {c |}  {space 2}{result:55}   {space 2}{result:32}   {space 3}{result:3}   {space 3}{result:90}
+  PPC{space 14} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 1} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO {c |}  {space 1}{result:110}   {space 2}{result:89}   {space 3}{result:8}   {space 2}{result:207}
+      Total{space 8} {c |}  {space 1}{result:110}   {space 2}{result:89}   {space 3}{result:8}   {space 2}{result:207}
+  SCI{space 14} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 1} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO {c |}  {space 3}{result:6}   {space 3}{result:8}   {space 4}   {space 3}{result:14}
+      Total{space 8} {c |}  {space 3}{result:6}   {space 3}{result:8}   {space 4}   {space 3}{result:14}
+  6{space 16} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 1} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO {c |}  {space 4}   {space 3}{result:4}   {space 4}   {space 4}{result:4}
+      Total{space 8} {c |}  {space 4}   {space 3}{result:4}   {space 4}   {space 4}{result:4}
+  Total{space 12} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 1} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO {c |}  {space 1}{result:213}   {space 1}{result:171}   {space 2}{result:14}   {space 2}{result:398}
+      Total{space 8} {c |}  {space 1}{result:213}   {space 1}{result:171}   {space 2}{result:14}   {space 2}{result:398}
+{hline 19}{c -}{c BT}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub) if decision ==3. statistic(fvfrequency decision)
+{err}invalid 'statistic' 
+{txt}{search r(198), local:r(198);}
+
+end of do-file
+
+{search r(198), local:r(198);}
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub) 
+{res}
+{smcl}
+{reset}{...}
+{hline 26}{c -}{c TT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+{space 26} {c |}  {space 10}year_sub{space 10}
+{space 26} {c |}  {space 1}2024   {space 1}2025   2026   Total
+{hline 26}{c -}{c +}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+Division{space 18} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+  GPA{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 4}{result:3}   {space 5}   {space 3}{result:3}   {space 4}{result:6}
+      Conditional Approval {c |}  {space 3}{result:12}   {space 3}{result:12}   {space 3}{result:1}   {space 3}{result:25}
+      Return to RTO{space 7} {c |}  {space 4}{result:3}   {space 4}{result:4}   {space 4}   {space 4}{result:7}
+      Reassign{space 12} {c |}  {space 4}{result:1}   {space 5}   {space 4}   {space 4}{result:1}
+      Respond to Consult{space 2} {c |}  {space 4}{result:4}   {space 4}{result:4}   {space 4}   {space 4}{result:8}
+      Total{space 15} {c |}  {space 3}{result:23}   {space 3}{result:20}   {space 3}{result:4}   {space 3}{result:47}
+  WHE{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:43}   {space 3}{result:51}   {space 2}{result:10}   {space 2}{result:104}
+      Conditional Approval {c |}  {space 2}{result:119}   {space 2}{result:109}   {space 2}{result:17}   {space 2}{result:245}
+      Return to RTO{space 7} {c |}  {space 3}{result:39}   {space 3}{result:34}   {space 3}{result:3}   {space 3}{result:76}
+      Reassign{space 12} {c |}  {space 4}{result:7}   {space 4}{result:2}   {space 3}{result:1}   {space 3}{result:10}
+      Respond to Consult{space 2} {c |}  {space 3}{result:15}   {space 3}{result:18}   {space 3}{result:1}   {space 3}{result:34}
+      Total{space 15} {c |}  {space 2}{result:223}   {space 2}{result:214}   {space 2}{result:32}   {space 2}{result:469}
+  HSD{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:105}   {space 2}{result:128}   {space 2}{result:10}   {space 2}{result:243}
+      Conditional Approval {c |}  {space 2}{result:111}   {space 2}{result:108}   {space 3}{result:7}   {space 2}{result:226}
+      Return to RTO{space 7} {c |}  {space 3}{result:55}   {space 3}{result:32}   {space 3}{result:3}   {space 3}{result:90}
+      Reassign{space 12} {c |}  {space 4}{result:4}   {space 4}{result:6}   {space 3}{result:1}   {space 3}{result:11}
+      Respond to Consult{space 2} {c |}  {space 3}{result:18}   {space 3}{result:26}   {space 3}{result:3}   {space 3}{result:47}
+      Total{space 15} {c |}  {space 2}{result:293}   {space 2}{result:300}   {space 2}{result:24}   {space 2}{result:617}
+  PPC{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:176}   {space 2}{result:174}   {space 2}{result:20}   {space 2}{result:370}
+      Conditional Approval {c |}  {space 2}{result:287}   {space 2}{result:304}   {space 2}{result:32}   {space 2}{result:623}
+      Return to RTO{space 7} {c |}  {space 2}{result:110}   {space 3}{result:89}   {space 3}{result:8}   {space 2}{result:207}
+      Reassign{space 12} {c |}  {space 4}{result:9}   {space 3}{result:31}   {space 3}{result:2}   {space 3}{result:42}
+      Respond to Consult{space 2} {c |}  {space 3}{result:43}   {space 3}{result:37}   {space 3}{result:4}   {space 3}{result:84}
+      Total{space 15} {c |}  {space 2}{result:625}   {space 2}{result:635}   {space 2}{result:66}   {result:1,326}
+  SCI{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:16}   {space 3}{result:28}   {space 3}{result:2}   {space 3}{result:46}
+      Conditional Approval {c |}  {space 3}{result:11}   {space 3}{result:26}   {space 3}{result:2}   {space 3}{result:39}
+      Return to RTO{space 7} {c |}  {space 4}{result:6}   {space 4}{result:8}   {space 4}   {space 3}{result:14}
+      Respond to Consult{space 2} {c |}  {space 4}{result:3}   {space 4}{result:4}   {space 4}   {space 4}{result:7}
+      Total{space 15} {c |}  {space 3}{result:36}   {space 3}{result:66}   {space 3}{result:4}   {space 2}{result:106}
+  6{space 23} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 5}   {space 4}{result:1}   {space 3}{result:1}   {space 4}{result:2}
+      Conditional Approval {c |}  {space 5}   {space 4}{result:2}   {space 4}   {space 4}{result:2}
+      Return to RTO{space 7} {c |}  {space 5}   {space 4}{result:4}   {space 4}   {space 4}{result:4}
+      Reassign{space 12} {c |}  {space 5}   {space 5}   {space 3}{result:2}   {space 4}{result:2}
+      Total{space 15} {c |}  {space 5}   {space 4}{result:7}   {space 3}{result:3}   {space 3}{result:10}
+  Total{space 19} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:343}   {space 2}{result:382}   {space 2}{result:46}   {space 2}{result:771}
+      Conditional Approval {c |}  {space 2}{result:540}   {space 2}{result:561}   {space 2}{result:59}   {result:1,160}
+      Return to RTO{space 7} {c |}  {space 2}{result:213}   {space 2}{result:171}   {space 2}{result:14}   {space 2}{result:398}
+      Reassign{space 12} {c |}  {space 3}{result:21}   {space 3}{result:39}   {space 3}{result:6}   {space 3}{result:66}
+      Respond to Consult{space 2} {c |}  {space 3}{result:83}   {space 3}{result:89}   {space 3}{result:8}   {space 2}{result:180}
+      Total{space 15} {c |}  {result:1,200}   {result:1,242}   {space 1}{result:133}   {result:2,575}
+{hline 26}{c -}{c BT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub) if decision <4
+{res}
+{smcl}
+{reset}{...}
+{hline 26}{c -}{c TT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+{space 26} {c |}  {space 10}year_sub{space 10}
+{space 26} {c |}  {space 1}2024   {space 1}2025   2026   Total
+{hline 26}{c -}{c +}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+Division{space 18} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+  GPA{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 4}{result:3}   {space 5}   {space 3}{result:3}   {space 4}{result:6}
+      Conditional Approval {c |}  {space 3}{result:12}   {space 3}{result:12}   {space 3}{result:1}   {space 3}{result:25}
+      Return to RTO{space 7} {c |}  {space 4}{result:3}   {space 4}{result:4}   {space 4}   {space 4}{result:7}
+      Total{space 15} {c |}  {space 3}{result:18}   {space 3}{result:16}   {space 3}{result:4}   {space 3}{result:38}
+  WHE{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:43}   {space 3}{result:51}   {space 2}{result:10}   {space 2}{result:104}
+      Conditional Approval {c |}  {space 2}{result:119}   {space 2}{result:109}   {space 2}{result:17}   {space 2}{result:245}
+      Return to RTO{space 7} {c |}  {space 3}{result:39}   {space 3}{result:34}   {space 3}{result:3}   {space 3}{result:76}
+      Total{space 15} {c |}  {space 2}{result:201}   {space 2}{result:194}   {space 2}{result:30}   {space 2}{result:425}
+  HSD{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:105}   {space 2}{result:128}   {space 2}{result:10}   {space 2}{result:243}
+      Conditional Approval {c |}  {space 2}{result:111}   {space 2}{result:108}   {space 3}{result:7}   {space 2}{result:226}
+      Return to RTO{space 7} {c |}  {space 3}{result:55}   {space 3}{result:32}   {space 3}{result:3}   {space 3}{result:90}
+      Total{space 15} {c |}  {space 2}{result:271}   {space 2}{result:268}   {space 2}{result:20}   {space 2}{result:559}
+  PPC{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:176}   {space 2}{result:174}   {space 2}{result:20}   {space 2}{result:370}
+      Conditional Approval {c |}  {space 2}{result:287}   {space 2}{result:304}   {space 2}{result:32}   {space 2}{result:623}
+      Return to RTO{space 7} {c |}  {space 2}{result:110}   {space 3}{result:89}   {space 3}{result:8}   {space 2}{result:207}
+      Total{space 15} {c |}  {space 2}{result:573}   {space 2}{result:567}   {space 2}{result:60}   {result:1,200}
+  SCI{space 21} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:16}   {space 3}{result:28}   {space 3}{result:2}   {space 3}{result:46}
+      Conditional Approval {c |}  {space 3}{result:11}   {space 3}{result:26}   {space 3}{result:2}   {space 3}{result:39}
+      Return to RTO{space 7} {c |}  {space 4}{result:6}   {space 4}{result:8}   {space 4}   {space 3}{result:14}
+      Total{space 15} {c |}  {space 3}{result:33}   {space 3}{result:62}   {space 3}{result:4}   {space 3}{result:99}
+  6{space 23} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 5}   {space 4}{result:1}   {space 3}{result:1}   {space 4}{result:2}
+      Conditional Approval {c |}  {space 5}   {space 4}{result:2}   {space 4}   {space 4}{result:2}
+      Return to RTO{space 7} {c |}  {space 5}   {space 4}{result:4}   {space 4}   {space 4}{result:4}
+      Total{space 15} {c |}  {space 5}   {space 4}{result:7}   {space 3}{result:1}   {space 4}{result:8}
+  Total{space 19} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 5}   {space 5}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:343}   {space 2}{result:382}   {space 2}{result:46}   {space 2}{result:771}
+      Conditional Approval {c |}  {space 2}{result:540}   {space 2}{result:561}   {space 2}{result:59}   {result:1,160}
+      Return to RTO{space 7} {c |}  {space 2}{result:213}   {space 2}{result:171}   {space 2}{result:14}   {space 2}{result:398}
+      Total{space 15} {c |}  {result:1,096}   {result:1,114}   {space 1}{result:119}   {result:2,329}
+{hline 26}{c -}{c BT}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 5}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub) if decision <4 & phase==1
+{res}
+{smcl}
+{reset}{...}
+{hline 26}{c -}{c TT}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+{space 26} {c |}  {space 9}year_sub{space 9}
+{space 26} {c |}  2024   2025   2026   Total
+{hline 26}{c -}{c +}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+Division{space 18} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+  GPA{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:2}   {space 4}   {space 3}{result:1}   {space 4}{result:3}
+      Conditional Approval {c |}  {space 3}{result:5}   {space 3}{result:7}   {space 3}{result:1}   {space 3}{result:13}
+      Return to RTO{space 7} {c |}  {space 3}{result:2}   {space 3}{result:1}   {space 4}   {space 4}{result:3}
+      Total{space 15} {c |}  {space 3}{result:9}   {space 3}{result:8}   {space 3}{result:2}   {space 3}{result:19}
+  WHE{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:23}   {space 2}{result:24}   {space 3}{result:4}   {space 3}{result:51}
+      Conditional Approval {c |}  {space 2}{result:71}   {space 2}{result:59}   {space 2}{result:16}   {space 2}{result:146}
+      Return to RTO{space 7} {c |}  {space 2}{result:30}   {space 2}{result:24}   {space 3}{result:3}   {space 3}{result:57}
+      Total{space 15} {c |}  {space 1}{result:124}   {space 1}{result:107}   {space 2}{result:23}   {space 2}{result:254}
+  HSD{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:61}   {space 2}{result:49}   {space 3}{result:7}   {space 2}{result:117}
+      Conditional Approval {c |}  {space 2}{result:67}   {space 2}{result:62}   {space 3}{result:4}   {space 2}{result:133}
+      Return to RTO{space 7} {c |}  {space 2}{result:47}   {space 2}{result:24}   {space 3}{result:3}   {space 3}{result:74}
+      Total{space 15} {c |}  {space 1}{result:175}   {space 1}{result:135}   {space 2}{result:14}   {space 2}{result:324}
+  PPC{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 1}{result:110}   {space 2}{result:52}   {space 3}{result:6}   {space 2}{result:168}
+      Conditional Approval {c |}  {space 1}{result:161}   {space 1}{result:149}   {space 2}{result:22}   {space 2}{result:332}
+      Return to RTO{space 7} {c |}  {space 2}{result:80}   {space 2}{result:44}   {space 3}{result:7}   {space 2}{result:131}
+      Total{space 15} {c |}  {space 1}{result:351}   {space 1}{result:245}   {space 2}{result:35}   {space 2}{result:631}
+  SCI{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:13}   {space 2}{result:11}   {space 4}   {space 3}{result:24}
+      Conditional Approval {c |}  {space 3}{result:7}   {space 2}{result:16}   {space 3}{result:1}   {space 3}{result:24}
+      Return to RTO{space 7} {c |}  {space 3}{result:6}   {space 3}{result:5}   {space 4}   {space 3}{result:11}
+      Total{space 15} {c |}  {space 2}{result:26}   {space 2}{result:32}   {space 3}{result:1}   {space 3}{result:59}
+  6{space 23} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 4}   {space 3}{result:1}   {space 3}{result:1}   {space 4}{result:2}
+      Conditional Approval {c |}  {space 4}   {space 3}{result:2}   {space 4}   {space 4}{result:2}
+      Return to RTO{space 7} {c |}  {space 4}   {space 3}{result:3}   {space 4}   {space 4}{result:3}
+      Total{space 15} {c |}  {space 4}   {space 3}{result:6}   {space 3}{result:1}   {space 4}{result:7}
+  Total{space 19} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 1}{result:209}   {space 1}{result:137}   {space 2}{result:19}   {space 2}{result:365}
+      Conditional Approval {c |}  {space 1}{result:311}   {space 1}{result:295}   {space 2}{result:44}   {space 2}{result:650}
+      Return to RTO{space 7} {c |}  {space 1}{result:165}   {space 1}{result:101}   {space 2}{result:13}   {space 2}{result:279}
+      Total{space 15} {c |}  {space 1}{result:685}   {space 1}{result:533}   {space 2}{result:76}   {result:1,294}
+{hline 26}{c -}{c BT}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. table (unit decision) (year_sub) if decision <4 & phase==2
+{res}
+{smcl}
+{reset}{...}
+{hline 26}{c -}{c TT}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+{space 26} {c |}  {space 9}year_sub{space 9}
+{space 26} {c |}  2024   2025   2026   Total
+{hline 26}{c -}{c +}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+Division{space 18} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+  GPA{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:1}   {space 4}   {space 3}{result:2}   {space 4}{result:3}
+      Conditional Approval {c |}  {space 3}{result:7}   {space 3}{result:5}   {space 4}   {space 3}{result:12}
+      Return to RTO{space 7} {c |}  {space 3}{result:1}   {space 3}{result:3}   {space 4}   {space 4}{result:4}
+      Total{space 15} {c |}  {space 3}{result:9}   {space 3}{result:8}   {space 3}{result:2}   {space 3}{result:19}
+  WHE{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:20}   {space 2}{result:27}   {space 3}{result:6}   {space 3}{result:53}
+      Conditional Approval {c |}  {space 2}{result:48}   {space 2}{result:50}   {space 3}{result:1}   {space 3}{result:99}
+      Return to RTO{space 7} {c |}  {space 3}{result:9}   {space 2}{result:10}   {space 4}   {space 3}{result:19}
+      Total{space 15} {c |}  {space 2}{result:77}   {space 2}{result:87}   {space 3}{result:7}   {space 2}{result:171}
+  HSD{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:44}   {space 2}{result:79}   {space 3}{result:3}   {space 2}{result:126}
+      Conditional Approval {c |}  {space 2}{result:44}   {space 2}{result:46}   {space 3}{result:3}   {space 3}{result:93}
+      Return to RTO{space 7} {c |}  {space 3}{result:8}   {space 3}{result:8}   {space 4}   {space 3}{result:16}
+      Total{space 15} {c |}  {space 2}{result:96}   {space 1}{result:133}   {space 3}{result:6}   {space 2}{result:235}
+  PPC{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 2}{result:66}   {space 1}{result:120}   {space 2}{result:14}   {space 2}{result:200}
+      Conditional Approval {c |}  {space 1}{result:126}   {space 1}{result:155}   {space 2}{result:10}   {space 2}{result:291}
+      Return to RTO{space 7} {c |}  {space 2}{result:30}   {space 2}{result:45}   {space 3}{result:1}   {space 3}{result:76}
+      Total{space 15} {c |}  {space 1}{result:222}   {space 1}{result:320}   {space 2}{result:25}   {space 2}{result:567}
+  SCI{space 21} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 3}{result:3}   {space 2}{result:17}   {space 3}{result:2}   {space 3}{result:22}
+      Conditional Approval {c |}  {space 3}{result:4}   {space 2}{result:10}   {space 3}{result:1}   {space 3}{result:15}
+      Return to RTO{space 7} {c |}  {space 4}   {space 3}{result:3}   {space 4}   {space 4}{result:3}
+      Total{space 15} {c |}  {space 3}{result:7}   {space 2}{result:30}   {space 3}{result:3}   {space 3}{result:40}
+  6{space 23} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Return to RTO{space 7} {c |}  {space 4}   {space 3}{result:1}   {space 4}   {space 4}{result:1}
+      Total{space 15} {c |}  {space 4}   {space 3}{result:1}   {space 4}   {space 4}{result:1}
+  Total{space 19} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+    Event Decision{space 8} {c |}  {space 4}   {space 4}   {space 4}   {space 5}
+      Approve{space 13} {c |}  {space 1}{result:134}   {space 1}{result:243}   {space 2}{result:27}   {space 2}{result:404}
+      Conditional Approval {c |}  {space 1}{result:229}   {space 1}{result:266}   {space 2}{result:15}   {space 2}{result:510}
+      Return to RTO{space 7} {c |}  {space 2}{result:48}   {space 2}{result:70}   {space 3}{result:1}   {space 2}{result:119}
+      Total{space 15} {c |}  {space 1}{result:411}   {space 1}{result:579}   {space 2}{result:43}   {result:1,033}
+{hline 26}{c -}{c BT}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 4}{c -}{c -}{c -}{hline 5}
+
+{com}. 
+{txt}end of do-file
+
+{com}. tab unit
+
+   {txt}Division {c |}      Freq.     Percent        Cum.
+{hline 12}{c +}{hline 35}
+        GPA {c |}{res}         52        1.97        1.97
+{txt}        WHE {c |}{res}        488       18.44       20.41
+{txt}        HSD {c |}{res}        630       23.81       44.22
+{txt}        PPC {c |}{res}      1,358       51.32       95.54
+{txt}        SCI {c |}{res}        108        4.08       99.62
+{txt}          6 {c |}{res}         10        0.38      100.00
+{txt}{hline 12}{c +}{hline 35}
+      Total {c |}{res}      2,646      100.00
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. collect clear
+{res}{txt}
+{com}. dtable i.phase i.decision if wf_seq2 == 1 & unit<6, ///
+>         by(year_sub) name(filtered_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 23}year_sub{space 22}
+{space 22} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:1,163 (44.9%)} {result:1,282 (49.5%)} {result:145 (5.6%)} {result:2,590 (100.0%)}
+Phase{space 17} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 12} {space 2}{result:687 (59.1%)} {space 2}{result:598 (46.6%)} {result:96 (66.2%)} {space 1}{result:1,381 (53.3%)}
+  Executive{space 11} {space 2}{result:464 (39.9%)} {space 2}{result:673 (52.5%)} {result:49 (33.8%)} {space 1}{result:1,186 (45.8%)}
+  Other{space 15} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+Event Decision{space 8} {space 13} {space 13} {space 10} {space 14}
+  Approve{space 13} {space 2}{result:330 (28.4%)} {space 2}{result:381 (31.0%)} {result:45 (34.9%)} {space 3}{result:756 (30.0%)}
+  Conditional Approval {space 2}{result:525 (45.2%)} {space 2}{result:557 (45.2%)} {result:58 (45.0%)} {space 1}{result:1,140 (45.2%)}
+  Return to RTO{space 7} {space 2}{result:207 (17.8%)} {space 2}{result:165 (13.4%)} {result:14 (10.9%)} {space 3}{result:386 (15.3%)}
+  Reassign{space 12} {space 4}{result:20 (1.7%)} {space 4}{result:39 (3.2%)} {space 2}{result:4 (3.1%)} {space 5}{result:63 (2.5%)}
+  Respond to Consult{space 2} {space 4}{result:79 (6.8%)} {space 4}{result:89 (7.2%)} {space 2}{result:8 (6.2%)} {space 4}{result:176 (7.0%)}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. do "/var/folders/kc/czh6lr110kj_15njdnljmx8w0000gn/T//SD43374.000000"
+{txt}
+{com}. dtable i.phase i.decision, ///
+>         by(year_sub) name(all_data)
+{res}
+{smcl}
+{reset}{...}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+{space 22} {space 23}year_sub{space 22}
+{space 22} {space 5}2024{space 4} {space 5}2025{space 4} {space 3}2026{space 3} {space 5}Total{space 4}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+N{space 21} {result:1,203 (45.4%)} {result:1,294 (48.9%)} {result:150 (5.7%)} {result:2,647 (100.0%)}
+Phase{space 17} {space 13} {space 13} {space 10} {space 14}
+  Planning{space 12} {space 2}{result:711 (59.1%)} {space 2}{result:607 (46.9%)} {result:99 (66.0%)} {space 1}{result:1,417 (53.5%)}
+  Executive{space 11} {space 2}{result:480 (39.9%)} {space 2}{result:676 (52.2%)} {result:51 (34.0%)} {space 1}{result:1,207 (45.6%)}
+  Other{space 15} {space 4}{result:12 (1.0%)} {space 4}{result:11 (0.9%)} {space 2}{result:0 (0.0%)} {space 5}{result:23 (0.9%)}
+Event Decision{space 8} {space 13} {space 13} {space 10} {space 14}
+  Approve{space 13} {space 2}{result:344 (28.6%)} {space 2}{result:382 (30.8%)} {result:46 (34.6%)} {space 3}{result:772 (30.0%)}
+  Conditional Approval {space 2}{result:540 (45.0%)} {space 2}{result:561 (45.2%)} {result:59 (44.4%)} {space 1}{result:1,160 (45.0%)}
+  Return to RTO{space 7} {space 2}{result:213 (17.7%)} {space 2}{result:171 (13.8%)} {result:14 (10.5%)} {space 3}{result:398 (15.5%)}
+  Reassign{space 12} {space 4}{result:21 (1.7%)} {space 4}{result:39 (3.1%)} {space 2}{result:6 (4.5%)} {space 5}{result:66 (2.6%)}
+  Respond to Consult{space 2} {space 4}{result:83 (6.9%)} {space 4}{result:89 (7.2%)} {space 2}{result:8 (6.0%)} {space 4}{result:180 (7.0%)}
+{hline 22}{c -}{hline 13}{c -}{hline 13}{c -}{hline 10}{c -}{hline 14}
+
+{com}. 
+{txt}end of do-file
+
+{com}. 
