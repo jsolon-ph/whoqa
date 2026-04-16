@@ -8,13 +8,6 @@ Adds item id to each relevant row with blank ids
 */
 
 * Packages
-ssc install carryforward
-
-ssc install sankey, replace
-ssc install palettes, replace
-ssc install colrspace, replace
-ssc install graphfunctions, replace
-
 
 clear
 set more off
@@ -124,7 +117,7 @@ recode tld2 (6=5) , ///
 gen(decision)
 drop tld2
 
-	label drop decision
+	capture label drop decision
 	label define decision 1 "Approve" 2 "Conditional Approval" 3 "Return to RTO" 4 "Reassign" ///
 	5 "Respond to Consult"
 	label values decision decision
@@ -216,4 +209,4 @@ gen ti_short = substr(title, 1, 20)
 * Replace system missing (.) with extended missing (.a)
 replace decision = .a if decision == .
 
-
+display "End of clean.do"
