@@ -1,7 +1,6 @@
 /*
-Total Data
-EU
-HQ
+cr_units.do
+- creates units based on orgpath
 */
 
 

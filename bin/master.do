@@ -1,7 +1,9 @@
 * master.do
 
+do lib/stata/macros.do
 include lib/stata/macros.do
-$lib_stata/packages.do
-$lib_stata/clean.do
-$lib_stata/cr_units.do
-$lib_stata/an_tables.do
+
+do $lib/packages.do
+do $lib/clean.do
+do $lib/cr_units.do
+do $lib/an_tables.do
