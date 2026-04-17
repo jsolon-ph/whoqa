@@ -1,25 +1,39 @@
-/* Tables */
-
+/* Tables 
+an_tables.do
+Path ./lib/stata/
+Used by : master.do
+Requires macros.do, packages.do, clean.do, cr_units.do to be run first
+Purpose : Creates tables
+Note :Uses project specific defined programs within this .do file
+*/
 
 ***** CREATE PROGRAM STYLEs : valid for this stata session
 capture program drop style_a
-capture program drop style_b
-capture program drop style_c
+capture program drop exp_docx
+
+**** Table Styles
 program define style_a
     syntax, name(string)
     
-    * Label
+    * Label dimensions
     collect label dim year_sub "Year", name(`name') modify
+	collect label dim quarter_sub "Quarter", name(`name')
+	* Label levels
 	* Style
     collect style header year_sub, title(hide) name(`name')
+	collect style header quarter_sub, level(label) name(`name')
     collect style cell result[fvfrequency], nformat(%5.0f) name(`name')
     collect style cell result[percent], nformat(%5.1f) sformat("%s%%") name(`name')
     collect style header result, title(hide) name(`name')
-    *collect style cell, halign(left) name(`name')
+
 end
 
+program define recode_a
+	syntax, name(string)
+	
+end
 
-***** CREATE EXPORT PROGRAM
+***** Export to docx, replace
 program define exp_docx
 	syntax, name(string)
 
@@ -28,205 +42,163 @@ end
 	
 ***** TABLES
 
-collect clear
-
-* Table 1: All data
-dtable i.phase i.decision, ///
-	by(year_sub) name(tab1) replace ///
-	title("Table 1 All Submissions")
+	collect clear
 	
-style_a, name(tab1)
-collect preview
+***  CREATE MACROS FOR CONDITIONS FOR TABLES AND TESTS 
+	local if1 ""
+	local if2 "if quarter==1 & unit < 6"
+	local if3 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==1 & unit<6"
+	local if4a "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6"
+	local if4b "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6 & year_sub!=2026"
+	local if5 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==1 & unit<6"
+	local if6 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6"
+	local if7 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==1 & unit<6"
+	local if8 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6"
+	local if9 "if quarter!=1 & year_sub<2026"
+	local if10 "if quarter==1"
+	local if11 "if quarter==1 & wf_seq==1"
+	
+	
+*** TABLE 1 ALL DATA 
+	dtable i.phase i.decision `if1', ///
+		by(year_sub) name(tab1) replace ///
+		title("Table 1 All Submissions")
+		
+	style_a, name(tab1)
+	collect preview
 
-exp_docx, name(tab1)
+	exp_docx, name(tab1)
 
-* Table 2: Filtered data (wf_seq == 1)
-
-dtable i.phase i.decision if wf_seq == 1 & unit<6, ///
-	by(year_sub) name(tab2) ///
+*** TABLE 2 ALL DATA (wf_seq == 1)
+	local if2 "if quarter==1 & unit < 6"
+	display "`if2'"
+	
+	dtable i.phase i.decision `if2', ///
+	by(year_sub) name(tab2) replace ///
 	title("Table 2 First Submissions")
-	
-style_a, name(tab2)
-collect preview
+		
+	style_a, name(tab2)
+	collect preview
 
 exp_docx, name(tab2)
 
-* Table 3 : Decisions by year, Planning ; with test for trend and chi square 
+*** TABLE 3 : Decisions by year, Planning ; with test for trend and chi square 
 
-nptrend decision ///
-	if phase==1 & wf_seq==1 & inlist(decision, 1, 2, 3), ///
+	local if3 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==1 & unit<6"
+	display "`if3'"
+	
+	nptrend decision ///
+	`if3', ///
 	group(year) cuzick
-	
-local trendp1 :  display %9.4f r(p)
-	
-dtable i.decision  ///
-	if wf_seq==1 & ///
-	inlist(decision, 1, 2, 3) & ///
-	phase==1 ///
-	& unit<6, ///
-	by(year_sub, tests) name(c3) ///
-	title("Table 3 Planning Phase : Initial Decision by Year per unique product") ///
-	notes(Test for trend p=`trendp1')
-	
-* 2. Modify the header labels for the collection named 'c3'
-collect label dim year_sub "Year", name(c3)
-collect preview
 
-* 3. Hide the title (the word "Year") so it doesn't repeat or look cluttered
-collect style header year_sub, title(hide) name(c3)
-collect preview
-
-* 4. Export the table
-collect export docs/table3.docx, name(c3) replace
+	local trendp1 :  display %9.4f r(p)
+	display "`if3'"
+	dtable i.decision `if3', ///
+		by(year_sub, tests) name(tab3) replace ///
+		title("Table 3 Planning Phase : Initial Decision by Year per unique product") ///
+		notes(Test for trend p=`trendp1')
 		
+	style_a, name(tab3)
+	collect preview
+	exp_docx, name(tab3)
 
+exp_docx, name(tab3)
+	
+*** TABLE 4 : Decisions by year, as table 3 but Executive (Phase =2)
 
-collect style row stack, nobinder nospacer name(c3)
-collect preview 
+	local if4a "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6"
+	local if4b "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6 & year_sub!=2026"
+	display "`if4a'"
+	display "`if4b'"
 
-* Table 4 : Decisions by year, Executive
+	nptrend decision ///
+		`if4a', ///
+		group(year) cuzick
+	local trendp2 :  display %9.4f r(p)
 
-* 1. Create stats and dtable
-nptrend decision ///
-	if phase==2 & wf_seq==1 & inlist(decision, 1, 2, 3), ///
-	group(year) cuzick
-local trendp2 :  display %9.4f r(p)
-
-nptrend decision ///
-	if phase==2 & wf_seq==1 & inlist(decision, 1, 2, 3) & year_sub!=2026, ///
-	group(year) cuzick
-local trendp3 :  display %9.4f r(p)
-
-
-dtable i.decision  ///
-	if wf_seq==1 & ///
-	inlist(decision, 1, 2, 3) & ///
-	phase==2 ///
-	& unit<6, ///
-	by(year_sub, tests) name(c4) ///
-	title("Table 4 Executive Phase : Initial Decision by Year per unique product") ///
-	notes(Test for trend p=`trendp2' and p = `trendp3' without 2026)
+	nptrend decision ///
+		`if4b', ///
+		group(year) cuzick
+	local trendp3 :  display %9.4f r(p)
+	
+	display "`if4a'"
+	dtable i.decision  ///
+		`if4a', ///
+		by(year_sub, tests) name(tab4) replace ///
+		title("Table 4 Executive Phase : Initial Decision by Year per unique product") ///
+		notes(Test for trend p=`trendp2' and p = `trendp3' without 2026)
 		
-* 2. Modify the header labels for the collection named 'c4'
-collect label dim year_sub "Year", name(c4)
-collect preview
-
-* 3. Hide the title (the word "Year") so it doesn't repeat or look cluttered
-collect style header year_sub, title(hide) name(c4)
-collect preview
-
-collect style row stack, nobinder nospacer name(c4)
-collect preview 
-
-* 4. Export the table
-collect export docs/table4.docx, name(c4) replace
+	style_a, name(tab4)
+	collect preview
+	
+	exp_docx, name(tab4)
 		
-
-* Table 5
-collect clear
-dtable i.decision  ///
-	if wf_seq==1 & ///
-	inlist(decision, 1, 2, 3) & ///
-	phase==1 ///
-	& unit<6, ///
-	by(unit, tests) name(c5) ///
-	title("Table 5 Planning Phase : Initial Decision by Unit per unique product") 
-
-* 2. Modify the header labels for the collection named 'c4'
-collect label dim year_sub "Year", name(c5)
-collect preview
-
-* 3. Hide the title (the word "Year") so it doesn't repeat or look cluttered
-collect style header year_sub, title(hide) name(c5)
-collect preview
-
-collect style row stack, nobinder nospacer name(c5)
-collect preview 
-
-* 4. Export the table
-collect export docs/table5.docx, name(c5) replace
+*** TABLE 5 : Planning Phase : Initial Decision by Unit per unique product 
+	local if5 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==1 & unit<6"
+	display "`if5'"
 	
-* Table 6
-collect clear
-dtable i.decision  ///
-	if wf_seq==1 & ///
-	inlist(decision, 1, 2, 3) & ///
-	phase==2 ///
-	& unit<6, ///
-	by(unit, tests) name(c6) ///
-	title("Table 6 Executive Phase : Initial Decision by Unit per unique product") 
+	dtable i.decision  ///
+		`if5', ///
+		by(unit, tests) name(tab5) replace ///
+		title("Table 5 Planning Phase : Initial Decision by Unit per unique product") 
+
+	style_a, name(tab5)
+	collect preview
 	
-
-* 2. Modify the header labels for the collection named 'c4'
-collect label dim year_sub "Year", name(c6)
-collect preview
-
-* 3. Hide the title (the word "Year") so it doesn't repeat or look cluttered
-collect style header year_sub, title(hide) name(c6)
-collect preview
-
-collect style row stack, nobinder nospacer name(c6)
-collect preview 
-
-* 4. Export the table
-collect export docs/table6.docx, name(c6) replace
-
-* Table 7
-collect clear
-dtable i.product  ///
-	if wf_seq==1 & ///
-	inlist(decision, 1, 2, 3) & ///
-	phase==1 ///
-	& unit<6, ///
-	by(decision, tests) name(c7) ///
-	title("Table 7 Planning Phase : Initial Decision by Product Type per unique product") 
+	exp_docx, name(tab5)
 	
+*** TABLE 6 Executive Phase : Initial Decision by Unit per unique product
 
-* 2. Modify the header labels for the collection named 'c7'
-collect label dim decision "Decision", name(c7)
-collect preview
+	local if6 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6"
+	display "`if6'"
 
-* 3. Hide the title (the word "Year") so it doesn't repeat or look cluttered
-collect style header decision, title(hide) name(c7)
-collect preview
-
-collect style row stack, nobinder nospacer name(c7)
-collect preview 
-
-* 4. Export the table
-collect export docs/table7.docx, name(c7) replace
+	dtable i.decision  ///
+		`if6', ///
+		by(unit, tests) name(tab6) replace ///
+		title("Table 6 Executive Phase : Initial Decision by Unit per unique product") 
+		
+	style_a, name(tab6)
+	collect preview
 	
-* Table 8
-collect clear
-dtable i.product  ///
-	if wf_seq==1 & ///
-	inlist(decision, 1, 2, 3) & ///
-	phase==2 ///
-	& unit<6, ///
-	by(decision, tests) name(c8) ///
-	title("Table 8 Executive Phase : Initial Decision by Product Type per unique product") 
+	exp_docx, name(tab6)
 
-	* 2. Modify the header labels for the collection named 'c7'
-collect label dim decision "Decision", name(c8)
-collect preview
+*** TABLE 7 Planning Phase : Initial Decision by Product Type per unique product
+	local if7 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==1 & unit<6"
+	display "`if7'"
 
-* 3. Hide the title (the word "Year") so it doesn't repeat or look cluttered
-collect style header decision, title(hide) name(c8)
-collect preview
+	dtable i.product  ///
+		`if7', ///
+		by(decision, tests) name(tab7) replace ///
+		title("Table 7 Planning Phase : Initial Decision by Product Type per unique product") 
+		
+	style_a, name(tab7)
+	collect preview
+	
+	exp_docx, name(tab7)
+	
+*** TABLE 8 Executive Phase : Initial Decision by Product Type per unique product
 
-collect style row stack, nobinder nospacer name(c8)
-collect preview 
+	local if8 "if wf_seq==1 & inlist(decision, 1, 2, 3) & phase==2 & unit<6"
+	display "`if8'"
+	
+	dtable i.product  ///
+		`if8', ///
+		by(decision, tests) name(tab8) replace ///
+		title("Table 8 Executive Phase : Initial Decision by Product Type per unique product") 
 
-* 4. Export the table
-collect export docs/table8.docx, name(c8) replace
+	style_a, name(tab8)
+	collect preview
+	
+	exp_docx, name(tab8)
 
-* Table 9
+*** TABLE 9 Initial Submissions by Quarter regardless of Phase
 
-gen N = 1
-
-collect clear
-
-tab quarter_sub year_sub if quarter!=1 & year_sub<2026, chi
+	local if9 "if quarter!=1 & year_sub<2026"
+	capture drop N
+	gen N = 1
+	
+	display "`if9'"
+	tab quarter_sub year_sub `if9' 
 
 	table (var)(year) , ///
 		stat(count N) ///
@@ -235,71 +207,60 @@ tab quarter_sub year_sub if quarter!=1 & year_sub<2026, chi
 			nformat(%5.0f percent) ///
 			nformat(%5.1f mean p25 p50 p75) ///
 			nformat(%5.2f sd) ///
-			name(c9)
-			
-
+			name(tab9) replace
+	
+	* Add Titles and Notes
+		collect title "Table 9 Initial Submissions by Quarter"
+		
+		collect notes, clear
+		collect notes "Shows first submission of each product regardless of Phase."
+		collect notes "Quarter 1 can be compared for 2024-2026"
+		collect notes "Quarters 2-4 can be compared for 2025-2026"
+	
 	* recodes fvfrequency and percent in the collection to columns 1 and 2
 		collect recode result fvfrequency = column1
 		collect recode result percent = column2
-
-		collect layout (var) (year_sub#result[column1 column2])
-collect dims
-collect label list dim
-
-		collect label dim year_sub "Year", name(c9)
-		collect label dim quarter_sub "Quarter", name(c9)
 		
+	* Collect Layout : moves frequencies and percent to same row in two columns
+		collect layout (var) (year_sub#result[column1 column2])
+		
+	* Label dimensions
+		collect label dim year_sub "Year", name(tab9)
+		collect label dim quarter_sub "Quarter", name(tab9)
+		
+	* Label levels 
+		collect label levels result column1 "N" column2 "%", modify name(tab9)
+		collect label levels quarter_sub 1 "Q1" 2 "Q2" 3 "Q3" 4 "Q4", name(tab9) modify
+		
+	* Style Headers
+		collect style header quarter_sub, title(hide) name(tab9)
+		collect style header result, title(hide) name(tab9)
+		
+	* Style Cells : Format Numbers and Strings
 
-		collect label levels quarter_sub 1 "Q1" 2 "Q2" 3 "Q3" 4 "Q4", name(c9) modify
-		collect style header quarter_sub, level(label) name(c9)
-		* Hides "quarter_sub=" and just shows "Q1", "Q2", etc.
-collect style header quarter_sub, title(hide) name(c9)
-* Rename the result statistics
-collect label levels result column1 "N" column2 "%", modify name(c9)
-
-* Hide the header title "result" if it appears
-collect style header result, title(hide) name(c9)
-
-
-
-
-* 1. Format the frequency (N) - remove decimals
-collect style cell result[column1], nformat(%5.0f) name(c9)
-
-* 2. Format the percent (%) - keep one decimal and add the symbol
-collect style cell result[column2], nformat(%5.1f) sformat("%s%%") name(c9)
-
-* 3. Refresh preview
-collect preview, name(c9)
-
-
-collect title "Table 9 Initial Submissions by Quarter"
-collect notes, clear
-	collect notes "Shows first submission of each product regardless of Phase."
-	collect notes "Quarter 1 can be compared for 2024-2026"
-	collect notes "Quarters 2-4 can be compared for 2025-2026"
-
-	
+		collect style cell result[column1], nformat(%5.0f) name(tab9)
+		collect style cell result[column2], nformat(%5.1f) sformat("%s%%") name(tab9)
 	collect preview
-* Export
+	* Export
+		exp_docx, name(tab9)
 
-	collect export docs/table9.docx, name(c9) as(docx) replace
 
-* Table 10
+*** Table 10 All Submissions Quarter 1 ; 3 Years
 
-capture drop N
-gen N = 1
+	local if10 "if quarter==1"
+	capture drop N
+	gen N = 1
 
-collect clear
+	*** TESTS 
+	display "`if10'"
+	tab month_sub year_sub `if10' , chi col
+	local pchi :  display %9.4f r(p)
 
-tab month_sub year_sub if quarter==1 , chi col
-local pchi :  display %9.4f r(p)
+	nptrend month_sub ///
+		 `if10' , ///
+		group(year_sub) cuzick
 
-nptrend month_sub ///
-	 if quarter==1 , ///
-	group(year_sub) cuzick
-
-	table (var)(year)  if quarter==1 , ///
+	table (var)(year) `if10' , ///
 		stat(count N) ///
 		stat(freq) ///
 		stat(fvfrequency month_sub) ///
@@ -308,74 +269,67 @@ nptrend month_sub ///
 			nformat(%5.1f mean p25 p50 p75) ///
 			nformat(%5.2f sd) ///
 			name(tab10) replace
+			
+	* ADD TEXT
+	
+		collect title "Table 10 All Submissions Quarter 1 ; 3 Years"
+		collect notes, clear
+		collect notes "χ² p-value = `pchi'"
 
-***** RECODES results to columns 1 and 2 
+	***** RECODES results to columns 1 and 2 
 		collect recode result fvfrequency = column1
 		collect recode result fvpercent = column2
 
-***** RECODES N AND COUNTS  
-collect recode var N = Total_N
-collect recode result count = column1
+	***** RECODES N AND COUNTS  
+		collect recode var N = Total_N
+		collect recode result count = column1
 
-***** CREATE  LAYOUT
-collect layout (var) (year_sub#result[column1 column2])
-		
-***** LABELS 
+	***** CREATE  LAYOUT
+		collect layout (var) (year_sub#result[column1 column2])
+			
+	***** LABELS 
 		collect label dim year_sub "Year", name(tab10)
 		collect label dim quarter_sub "Quarter", name(tab10)
 		collect label levels quarter_sub 1 "Q1" 2 "Q2" 3 "Q3" 4 "Q4", name(tab10) modify
 		collect style header quarter_sub, level(label) name(tab10)
-		// Rename the rows for the final table
-collect label levels var Total_N "Total N", modify
-collect label levels var 1.month_sub "Jan", modify
-collect label levels var 2.month_sub "Feb", modify
-collect label levels var 3.month_sub "Mar", modify
-collect label levels result column1 "N" column2 "%", modify name(tab10)
+		
+		collect label levels var Total_N "Total N", modify
+		collect label levels var 1.month_sub "Jan", modify
+		collect label levels var 2.month_sub "Feb", modify
+		collect label levels var 3.month_sub "Mar", modify
+		collect label levels result column1 "N" column2 "%", modify name(tab10)
 
-***** HIDE 
-* Hides "quarter_sub=" and just shows "Q1", "Q2", etc.
-* collect style header quarter_sub, title(hide) name(tab10)
-* Rename the result statistics
+	***** Style Cells : Format strings and numbers  
 
-* Hide the header title "result" if it appears
-* collect style header result, title(hide) name(tab10)
+		collect style cell result[column1], nformat(%5.0f) name(tab10)
+		collect style cell result[column2], nformat(%5.1f) sformat("%s%%") name(tab10)
 
-***** FORMAT 
-* 1. Format the frequency (N) - remove decimals
-collect style cell result[column1], nformat(%5.0f) name(tab10)
+	* 3. Refresh preview
+		collect preview, name(tab10)
 
-* 2. Format the percent (%) - keep one decimal and add the symbol
-collect style cell result[column2], nformat(%5.1f) sformat("%s%%") name(tab10)
-
-* 3. Refresh preview
-collect preview, name(tab10)
+	exp_docx, name(tab10)
 
 
-collect title "Table 10 All Submissions Quarter 1 ; 3 Years"
-collect notes, clear
-collect notes "χ² p-value = `pchi'"
-collect preview, name(tab10)
+*** TABLE 11 - First Submissions Quarter 1 ; 3 Years
 
-exp_docx, name(tab10)
+	capture drop N
+	gen N = 1
+
+	local if11 "if quarter==1 & wf_seq==1"
 
 
-* Table 11 - as table 10 but filtered for first submission wf_seq==1
+	*** TESTS 
+	display "`if11'"
+	
+	tab month_sub year_sub `if11' , chi col
+	local pchi :  display %9.4f r(p)
 
-capture drop N
-gen N = 1
-
-collect clear
-local if "if quarter==1 & wf_seq==1"
-* "Filtered for first submission"
-
-tab month_sub year_sub `if' , chi col
-local pchi :  display %9.4f r(p)
-
-nptrend month_sub ///
-	 `if' , ///
+	nptrend month_sub ///
+	 `if11' , ///
 	group(year_sub) cuzick
 
-	table (var)(year) `if' , ///
+	display "`if11'"
+	table (var)(year) `if11' , ///
 		stat(count N) ///
 		stat(freq) ///
 		stat(fvfrequency month_sub) ///
@@ -385,54 +339,44 @@ nptrend month_sub ///
 			nformat(%5.2f sd) ///
 			name(tab11) replace
 
-***** RECODES results to columns 1 and 2 
+	***** RECODES results to columns 1 and 2 
 		collect recode result fvfrequency = column1
 		collect recode result fvpercent = column2
+		collect recode result count = column1
+	***** RECODES VAR 
+		collect recode var N = Total_N
 
-***** RECODES N AND COUNTS  
-collect recode var N = Total_N
-collect recode result count = column1
-
-***** CREATE  LAYOUT
-collect layout (var) (year_sub#result[column1 column2])
+	***** COLLECT LAYOUT  LAYOUT
+		collect layout (var) (year_sub#result[column1 column2])
 		
-***** LABELS 
+	***** LABEL DIMENSIONS 
 		collect label dim year_sub "Year", name(tab11)
 		collect label dim quarter_sub "Quarter", name(tab11)
 		collect label levels quarter_sub 1 "Q1" 2 "Q2" 3 "Q3" 4 "Q4", name(tab11) modify
+		
+	***** LABEL LEVELS
+
+		collect label levels var Total_N "Total N", modify
+		collect label levels var 1.month_sub "Jan", modify
+		collect label levels var 2.month_sub "Feb", modify
+		collect label levels var 3.month_sub "Mar", modify
+		collect label levels result column1 "N" column2 "%", modify name(tab11)
+	
+	***** STYLE HEADER
+
 		collect style header quarter_sub, level(label) name(tab11)
-		// Rename the rows for the final table
-collect label levels var Total_N "Total N", modify
-collect label levels var 1.month_sub "Jan", modify
-collect label levels var 2.month_sub "Feb", modify
-collect label levels var 3.month_sub "Mar", modify
-collect label levels result column1 "N" column2 "%", modify name(tab11)
+	
+	***** Style Cells : Format strings and numbers  
+	
+		collect style cell result[column1], nformat(%5.0f) name(tab11)
+		collect style cell result[column2], nformat(%5.1f) sformat("%s%%") name(tab11)
 
-***** HIDE 
-* Hides "quarter_sub=" and just shows "Q1", "Q2", etc.
-* collect style header quarter_sub, title(hide) name(tab11)
-* Rename the result statistics
+	* 3. Refresh preview
+		collect preview, name(tab11)
 
-* Hide the header title "result" if it appears
-* collect style header result, title(hide) name(tab11)
-
-***** FORMAT 
-* 1. Format the frequency (N) - remove decimals
-collect style cell result[column1], nformat(%5.0f) name(tab11)
-
-* 2. Format the percent (%) - keep one decimal and add the symbol
-collect style cell result[column2], nformat(%5.1f) sformat("%s%%") name(tab11)
-
-* 3. Refresh preview
-collect preview, name(tab11)
-
-
-collect title "Table 11 First Submissions Quarter 1 ; 3 Years"
-collect notes, clear
-collect notes "χ² p-value = `pchi'"
-collect preview, name(tab11)
-
-exp_docx, name(tab11) 
+	exp_docx, name(tab11) 
+	
+	display "End of an_tables.do"
 
 
 
